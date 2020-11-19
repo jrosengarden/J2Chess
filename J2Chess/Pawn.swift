@@ -22,7 +22,7 @@ class Pawn: UIChessPiece {
         self.textColor = color
         self.isUserInteractionEnabled = true
         self.textAlignment = .center
-        self.font = self.font.withSize(36)
+        self.font = self.font.withSize(PIECE_SIZE)
         
         vc.chessPieces.append(self)
         vc.view.addSubview(self)

@@ -6,6 +6,7 @@
 //
 
 import UIKit
+var PIECE_SIZE: CGFloat = 52
 
 protocol Piece {
     var x: CGFloat {get set}
