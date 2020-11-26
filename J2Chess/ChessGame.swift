@@ -14,4 +14,12 @@ class ChessGame: NSObject {
     init(viewController: ViewController) {
         theChessBoard = ChessBoard.init(viewController: viewController)
     }
+    
+    func isMoveValid(piece: UIChessPiece, fromIndex sourceIndex: BoardIndex, toIndex destIndex: BoardIndex) -> Bool {
+        if piece.text == "♟︎" || piece.text == "♙" {
+            return false
+        } else {
+            return true
+        }
+    }
 }

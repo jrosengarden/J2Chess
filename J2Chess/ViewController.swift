@@ -46,7 +46,43 @@ class ViewController: UIViewController {
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        
+      
+        if pieceDragged != nil {
+            
+            // calc raw x & y location of where touch ended
+            let touchLocation = touches.first!.location(in: view)
+            var x   = Int(touchLocation.x)
+            var y   = Int(touchLocation.y)
+            
+            // backout blank space above (y) and to the left (x) of the game board
+            // so we are only working with the board coordinate system
+            x -= ViewController.SPACE_FROM_LEFT_EDGE
+            y -= ViewController.SPACE_FROM_TOP_EDGE
+            
+            // 1st part of either equation gives us the column or row # where touch ended (0-7)
+            // 2nd part of either equation then gives us the exact coordinates (x & y)
+            // by multiplying the calculated col/row number by the tile size
+            x = (x / ViewController.TILE_SIZE) * ViewController.TILE_SIZE
+            y = (y / ViewController.TILE_SIZE) * ViewController.TILE_SIZE
+            
+            // now add back the blank space above (y) and to the left (x) of the game board
+            // so we finally have the actual screen coordinates of where the touch ended
+            x += ViewController.SPACE_FROM_LEFT_EDGE
+            y += ViewController.SPACE_FROM_TOP_EDGE
+            
+            // set destOrigin to our calc'd x & y coordinates as a CGPoint
+            destOrigin = CGPoint(x: x, y: y)
+            
+            let sourceIndex = BoardIndex(row: 0, col: 0)
+            let destIndex = BoardIndex(row: 0, col: 0)
+            
+            if myChessGame.isMoveValid(piece: pieceDragged, fromIndex: sourceIndex, toIndex: destIndex){
+                pieceDragged.frame.origin = destOrigin
+            } else {
+                pieceDragged.frame.origin = sourceOrigin
+            }
+            
+        }
     }
     
     func drag(piece: UIChessPiece, usingGestureRecognizer gestureRecognizer: UIPanGestureRecognizer) {
