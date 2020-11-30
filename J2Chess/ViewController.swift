@@ -73,11 +73,14 @@ class ViewController: UIViewController {
             // set destOrigin to our calc'd x & y coordinates as a CGPoint
             destOrigin = CGPoint(x: x, y: y)
             
-            let sourceIndex = BoardIndex(row: 0, col: 0)
-            let destIndex = BoardIndex(row: 0, col: 0)
+            
+            // convert the sourceOrigin and destOrigin from CGPoint's to
+            // actual ChessBoard (x,y) coordinates
+            let sourceIndex = ChessBoard.indexOf(origin: sourceOrigin)
+            let destIndex = ChessBoard.indexOf(origin: destOrigin)
             
             if myChessGame.isMoveValid(piece: pieceDragged, fromIndex: sourceIndex, toIndex: destIndex){
-                pieceDragged.frame.origin = destOrigin
+                myChessGame.move(piece: pieceDragged, fromIndex: sourceIndex, toIndex: destIndex, toOrigin: destOrigin)
             } else {
                 pieceDragged.frame.origin = sourceOrigin
             }
