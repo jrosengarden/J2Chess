@@ -80,12 +80,27 @@ class ViewController: UIViewController {
             let destIndex = ChessBoard.indexOf(origin: destOrigin)
             
             if myChessGame.isMoveValid(piece: pieceDragged, fromIndex: sourceIndex, toIndex: destIndex){
+                
+                // move is valid so move the piece
                 myChessGame.move(piece: pieceDragged, fromIndex: sourceIndex, toIndex: destIndex, toOrigin: destOrigin)
+                
+                // flip value of isWhiteTurn
+                myChessGame.nextTurn()
+                
+                // update screen with which color's turn it is
+                updateTurnOnScreen()
             } else {
+                // move isn't valid so return dragged piece to it's origin
                 pieceDragged.frame.origin = sourceOrigin
             }
             
         }
+    }
+    
+    // update screen text & color 
+    func updateTurnOnScreen() {
+        lblDisplayTurnOUTLET.text = myChessGame.isWhiteTurn ? "White's turn" : "Black's turn"
+        lblDisplayTurnOUTLET.textColor = myChessGame.isWhiteTurn ? #colorLiteral(red: 0.9999960065, green: 1, blue: 1, alpha: 1) : #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
     }
     
     func drag(piece: UIChessPiece, usingGestureRecognizer gestureRecognizer: UIPanGestureRecognizer) {
