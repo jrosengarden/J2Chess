@@ -11,9 +11,14 @@ class ChessGame: NSObject {
     
     var theChessBoard: ChessBoard!
     var isWhiteTurn:Bool = true                 // variable to track which color's turn it is
+    var moveCount:Int?                          // track move count for move display
+    var firstHalfMove:String?                   // save current move until opponent moves
+    var pieceToRemove:Piece?                    // global variable for piece (if any) at dest square
     
     init(viewController: ViewController) {
         theChessBoard = ChessBoard.init(viewController: viewController)
+        moveCount = 1
+        firstHalfMove = ""
     }
     
     func move(piece chessPieceToMove: UIChessPiece, fromIndex sourceIndex: BoardIndex, toIndex destIndex: BoardIndex, toOrigin destOrigin: CGPoint) {
@@ -22,8 +27,8 @@ class ChessGame: NSObject {
         let initialChessPieceFrame = chessPieceToMove.frame
     
         // remove piece at destination
-        let pieceToRemove = theChessBoard.board[destIndex.row][destIndex.col]
-        theChessBoard.remove(piece: pieceToRemove)
+        pieceToRemove = theChessBoard.board[destIndex.row][destIndex.col]
+        theChessBoard.remove(piece: pieceToRemove!)
         
         //place the chess piece at destination
         theChessBoard.place(chessPiece: chessPieceToMove, toIndex: destIndex, toOrigin: destOrigin)
@@ -82,8 +87,12 @@ class ChessGame: NSObject {
     // function to flip value of isWhiteTurn
     // if true flip to false
     // if flase flip to true
+    // everytime it's white's turn increase the move count
     func nextTurn() {
         isWhiteTurn = !isWhiteTurn
+        if isWhiteTurn {
+            moveCount! += 1
+        }
     }
     
     
@@ -151,25 +160,33 @@ class ChessGame: NSObject {
         var algebraicDestPosition:String?
         var correction:Int?
         var thePiece:String?
+        var capture:String?
         
-        // set thePiece value based on current color moving and class of piece
+        // set capture string to "x" if the target square was not empty (Dummy)
+        if pieceToRemove is Dummy {
+            capture = ""
+        } else {
+            capture = "x"
+        }
+        
+        // set thePiece value based on class of piece
         if (chessPieceToMove is Pawn) {
-            thePiece = isWhiteTurn ? "White Pawn" : "Black Pawn"
+            thePiece = ""
         }
         if (chessPieceToMove is Rook) {
-            thePiece = isWhiteTurn ? "White Rook" : "Black Rook"
+            thePiece = "R"
         }
         if (chessPieceToMove is Knight) {
-            thePiece = isWhiteTurn ? "White Knight" : "Black Knight"
+            thePiece = "N"
         }
         if (chessPieceToMove is Bishop) {
-            thePiece = isWhiteTurn ? "White Bishop" : "Black Bishop"
+            thePiece = "B"
         }
         if (chessPieceToMove is Queen) {
-            thePiece = isWhiteTurn ? "White Queen" : "Black Queen"
+            thePiece = "Q"
         }
         if (chessPieceToMove is King) {
-            thePiece = isWhiteTurn ? "White King" : "Black King"
+            thePiece = "K"
         }
         
 
@@ -196,22 +213,23 @@ class ChessGame: NSObject {
         // set final source position to algebraic notation
         switch sourceIndex.col {
         case 0:
-            algebraicSourcePosition = "A" + String(correction!)
+            algebraicSourcePosition = "a" + String(correction!)
         case 1:
-            algebraicSourcePosition = "B" + String(correction!)
+            algebraicSourcePosition = "b" + String(correction!)
         case 2:
-            algebraicSourcePosition = "C" + String(correction!)
+            algebraicSourcePosition = "c" + String(correction!)
         case 3:
-            algebraicSourcePosition = "D" + String(correction!)
+            algebraicSourcePosition = "d" + String(correction!)
         case 4:
-            algebraicSourcePosition = "E" + String(correction!)
+            algebraicSourcePosition = "e" + String(correction!)
         case 5:
-            algebraicSourcePosition = "F" + String(correction!)
+            algebraicSourcePosition = "f" + String(correction!)
         case 6:
-            algebraicSourcePosition = "G" + String(correction!)
+            algebraicSourcePosition = "g" + String(correction!)
         default:
-            algebraicSourcePosition = "H" + String(correction!)
+            algebraicSourcePosition = "h" + String(correction!)
         }
+
         
         // convert destIndex.row to algebraic notation value
         switch destIndex.row {
@@ -236,32 +254,50 @@ class ChessGame: NSObject {
         // set final destination position to algebraic notation
         switch destIndex.col {
         case 0:
-            algebraicDestPosition = "A" + String(correction!)
+            algebraicDestPosition = "a" + String(correction!)
         case 1:
-            algebraicDestPosition = "B" + String(correction!)
+            algebraicDestPosition = "b" + String(correction!)
         case 2:
-            algebraicDestPosition = "C" + String(correction!)
+            algebraicDestPosition = "c" + String(correction!)
         case 3:
-            algebraicDestPosition = "D" + String(correction!)
+            algebraicDestPosition = "d" + String(correction!)
         case 4:
-            algebraicDestPosition = "E" + String(correction!)
+            algebraicDestPosition = "e" + String(correction!)
         case 5:
-            algebraicDestPosition = "F" + String(correction!)
+            algebraicDestPosition = "f" + String(correction!)
         case 6:
-            algebraicDestPosition = "G" + String(correction!)
+            algebraicDestPosition = "g" + String(correction!)
         default:
-            algebraicDestPosition = "H" + String(correction!)
+            algebraicDestPosition = "h" + String(correction!)
         }
         
-        // display move, in algebraic notation, on display
-        theChessBoard.vc.dispMove.text! =  "Moving \(thePiece ?? "") "
-        theChessBoard.vc.dispMove.text! += "from \(algebraicSourcePosition ?? "") "
-        theChessBoard.vc.dispMove.text! += "to \(algebraicDestPosition ?? "")"
-        theChessBoard.vc.dispMove.textColor = isWhiteTurn ? #colorLiteral(red: 0.9999960065, green: 1, blue: 1, alpha: 1) : #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+        // if capture was made by pawn alter the algebraicDestPosition string accordingly
+        if capture == "x" && thePiece == "" {
+            algebraicDestPosition = (algebraicSourcePosition?.prefix(1))! + "x" + algebraicDestPosition!
+            capture = ""
+        }
         
+        // if it was black's turn it's time to update the dispMove label
+        // if it was white's turn then save the move to firstHalfMove
+        if !(isWhiteTurn) {
+            // display move, in algebraic notation, on display
+            theChessBoard.vc.dispMove.text! = firstHalfMove!
+            theChessBoard.vc.dispMove.text! +=  " \(thePiece ?? "")"
+            theChessBoard.vc.dispMove.text! += capture!
+            //theChessBoard.vc.dispMove.text! += "\(algebraicSourcePosition ?? "")"
+            theChessBoard.vc.dispMove.text! += "\(algebraicDestPosition ?? "")"
+            theChessBoard.vc.dispMove.textColor = isWhiteTurn ? #colorLiteral(red: 0.9999960065, green: 1, blue: 1, alpha: 1) : #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+            
+            // debugging
+            print (theChessBoard.vc.dispMove.text!)
+            
+        } else {
+            firstHalfMove! = "\(moveCount ?? 0): \(thePiece ?? "")"
+            firstHalfMove! += capture!
+            //firstHalfMove! += "\(algebraicSourcePosition ?? "")"
+            firstHalfMove! += "\(algebraicDestPosition ?? "")"
+        }
         
-        // debugging
-        print (theChessBoard.vc.dispMove.text!)
     }
     
     
