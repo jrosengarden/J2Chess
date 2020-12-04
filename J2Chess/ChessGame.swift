@@ -38,12 +38,17 @@ class ChessGame: NSObject {
     func isMoveValid(piece: UIChessPiece, fromIndex sourceIndex: BoardIndex, toIndex destIndex: BoardIndex) -> Bool {
         
         guard isMoveOnBoard(forPieceFrom: sourceIndex, thatGoesTo: destIndex) else {
-            print("MOVE IS NOT ON BOARD")
+            theChessBoard.vc.dispMove.text = "MOVE IS NOT ON BOARD"
+            theChessBoard.vc.dispMove.textColor = isWhiteTurn ? #colorLiteral(red: 0.9999960065, green: 1, blue: 1, alpha: 1) : #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+            print(theChessBoard.vc.dispMove.text!)
             return false
         }
         
         guard isTurnColor(sameAsPiece: piece) else {
-            print("WRONG TURN")
+            theChessBoard.vc.dispMove.text = "NOT"
+            theChessBoard.vc.dispMove.text! += isWhiteTurn ? " BLACK'S TURN" : " WHITE'S TURN"
+            theChessBoard.vc.dispMove.textColor = isWhiteTurn ? #colorLiteral(red: 0.9999960065, green: 1, blue: 1, alpha: 1) : #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+            print(theChessBoard.vc.dispMove.text!)
             return false
         }
                
@@ -58,12 +63,16 @@ class ChessGame: NSObject {
     func isNormalMoveValid(forPiece piece: UIChessPiece, fromIndex source: BoardIndex, toIndex dest: BoardIndex) -> Bool {
         
         guard source != dest else {
-            print ("MOVING PIECE ON ITS CURRENT POSITION")
+            theChessBoard.vc.dispMove.text = "MOVING PIECE ON ITS OWN POSITION"
+            theChessBoard.vc.dispMove.textColor = isWhiteTurn ? #colorLiteral(red: 0.9999960065, green: 1, blue: 1, alpha: 1) : #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+            print (theChessBoard.vc.dispMove.text!)
             return false
         }
  
         guard !isAttackingAlliedPiece(sourceChessPiece: piece, destIndex: dest) else {
-                print("ATTACKING ALLIED PIECE")
+                theChessBoard.vc.dispMove.text = "ATTACKING YOUR OWN PIECE"
+                theChessBoard.vc.dispMove.textColor = isWhiteTurn ? #colorLiteral(red: 0.9999960065, green: 1, blue: 1, alpha: 1) : #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+                print(theChessBoard.vc.dispMove.text!)
                 return false
                 }
         
@@ -77,6 +86,8 @@ class ChessGame: NSObject {
         isWhiteTurn = !isWhiteTurn
     }
     
+    
+    // insure the move being made is actually on the board
     func isMoveOnBoard(forPieceFrom sourceIndex: BoardIndex, thatGoesTo destIndex: BoardIndex) -> Bool {
         
         if case 0..<theChessBoard.ROWS = sourceIndex.row {
@@ -130,6 +141,127 @@ class ChessGame: NSObject {
         // if the two pieces are the same color return true, else return false
         return (destChessPiece.color == sourceChessPiece.color)
         
+    }
+    
+    
+    // calculate the algebraic notation version of the move then display it
+    func showMove(piece chessPieceToMove: UIChessPiece, fromIndex sourceIndex: BoardIndex, toIndex destIndex: BoardIndex) {
+        
+        var algebraicSourcePosition:String?
+        var algebraicDestPosition:String?
+        var correction:Int?
+        var thePiece:String?
+        
+        // set thePiece value based on current color moving and class of piece
+        if (chessPieceToMove is Pawn) {
+            thePiece = isWhiteTurn ? "White Pawn" : "Black Pawn"
+        }
+        if (chessPieceToMove is Rook) {
+            thePiece = isWhiteTurn ? "White Rook" : "Black Rook"
+        }
+        if (chessPieceToMove is Knight) {
+            thePiece = isWhiteTurn ? "White Knight" : "Black Knight"
+        }
+        if (chessPieceToMove is Bishop) {
+            thePiece = isWhiteTurn ? "White Bishop" : "Black Bishop"
+        }
+        if (chessPieceToMove is Queen) {
+            thePiece = isWhiteTurn ? "White Queen" : "Black Queen"
+        }
+        if (chessPieceToMove is King) {
+            thePiece = isWhiteTurn ? "White King" : "Black King"
+        }
+        
+
+        // convert sourceIndex.row to algebraic notation value
+        switch sourceIndex.row {
+        case 7:
+            correction = 1
+        case 6:
+            correction = 2
+        case 5:
+            correction = 3
+        case 4:
+            correction = 4
+        case 3:
+            correction = 5
+        case 2:
+            correction = 6
+        case 1:
+            correction = 7
+        default:
+            correction = 8
+        }
+        
+        // set final source position to algebraic notation
+        switch sourceIndex.col {
+        case 0:
+            algebraicSourcePosition = "A" + String(correction!)
+        case 1:
+            algebraicSourcePosition = "B" + String(correction!)
+        case 2:
+            algebraicSourcePosition = "C" + String(correction!)
+        case 3:
+            algebraicSourcePosition = "D" + String(correction!)
+        case 4:
+            algebraicSourcePosition = "E" + String(correction!)
+        case 5:
+            algebraicSourcePosition = "F" + String(correction!)
+        case 6:
+            algebraicSourcePosition = "G" + String(correction!)
+        default:
+            algebraicSourcePosition = "H" + String(correction!)
+        }
+        
+        // convert destIndex.row to algebraic notation value
+        switch destIndex.row {
+        case 7:
+            correction = 1
+        case 6:
+            correction = 2
+        case 5:
+            correction = 3
+        case 4:
+            correction = 4
+        case 3:
+            correction = 5
+        case 2:
+            correction = 6
+        case 1:
+            correction = 7
+        default:
+            correction = 8
+        }
+        
+        // set final destination position to algebraic notation
+        switch destIndex.col {
+        case 0:
+            algebraicDestPosition = "A" + String(correction!)
+        case 1:
+            algebraicDestPosition = "B" + String(correction!)
+        case 2:
+            algebraicDestPosition = "C" + String(correction!)
+        case 3:
+            algebraicDestPosition = "D" + String(correction!)
+        case 4:
+            algebraicDestPosition = "E" + String(correction!)
+        case 5:
+            algebraicDestPosition = "F" + String(correction!)
+        case 6:
+            algebraicDestPosition = "G" + String(correction!)
+        default:
+            algebraicDestPosition = "H" + String(correction!)
+        }
+        
+        // display move, in algebraic notation, on display
+        theChessBoard.vc.dispMove.text! =  "Moving \(thePiece ?? "") "
+        theChessBoard.vc.dispMove.text! += "from \(algebraicSourcePosition ?? "") "
+        theChessBoard.vc.dispMove.text! += "to \(algebraicDestPosition ?? "")"
+        theChessBoard.vc.dispMove.textColor = isWhiteTurn ? #colorLiteral(red: 0.9999960065, green: 1, blue: 1, alpha: 1) : #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+        
+        
+        // debugging
+        print (theChessBoard.vc.dispMove.text!)
     }
     
     

@@ -12,6 +12,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var lblDisplayTurnOUTLET: UILabel!
     @IBOutlet weak var lblDisplayCheckOUTLET: UILabel!
     @IBOutlet var panOUTLET: UIPanGestureRecognizer!
+    @IBOutlet weak var dispMove: UILabel!
     
     var pieceDragged: UIChessPiece!
     var sourceOrigin: CGPoint!
@@ -83,6 +84,9 @@ class ViewController: UIViewController {
                 
                 // move is valid so move the piece
                 myChessGame.move(piece: pieceDragged, fromIndex: sourceIndex, toIndex: destIndex, toOrigin: destOrigin)
+                
+                // show move, in algebraic notation, on screen & print in debug area
+                myChessGame.showMove(piece: pieceDragged, fromIndex: sourceIndex, toIndex: destIndex)
                 
                 // flip value of isWhiteTurn
                 myChessGame.nextTurn()
