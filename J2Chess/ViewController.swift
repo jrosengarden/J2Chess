@@ -85,8 +85,12 @@ class ViewController: UIViewController {
                 // move is valid so move the piece
                 myChessGame.move(piece: pieceDragged, fromIndex: sourceIndex, toIndex: destIndex, toOrigin: destOrigin)
                 
-                // show move, in algebraic notation, on screen & print in debug area
-                myChessGame.showMove(piece: pieceDragged, fromIndex: sourceIndex, toIndex: destIndex)
+                // show move, in algebraic notation, on screen
+                self.dispMove.text = myChessGame.calcAlgebraicNotation(piece: pieceDragged, fromIndex: sourceIndex, toIndex: destIndex)
+                // debugging
+                if self.dispMove.text != "" {
+                    print (self.dispMove.text!)
+                }
                 
                 // flip value of isWhiteTurn
                 myChessGame.nextTurn()

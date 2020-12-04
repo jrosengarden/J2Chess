@@ -153,8 +153,8 @@ class ChessGame: NSObject {
     }
     
     
-    // calculate the algebraic notation version of the move then display it
-    func showMove(piece chessPieceToMove: UIChessPiece, fromIndex sourceIndex: BoardIndex, toIndex destIndex: BoardIndex) {
+    // calculate the algebraic notation version of the move then return it to caller
+    func calcAlgebraicNotation(piece chessPieceToMove: UIChessPiece, fromIndex sourceIndex: BoardIndex, toIndex destIndex: BoardIndex) -> String {
         
         var algebraicSourcePosition:String?
         var algebraicDestPosition:String?
@@ -277,20 +277,17 @@ class ChessGame: NSObject {
             capture = ""
         }
         
-        // if it was black's turn it's time to update the dispMove label
+        var moveText = ""
+        // if it was black's turn it's time to construct the move string
+        // and return it to the calling function
         // if it was white's turn then save the move to firstHalfMove
+        // and return nothing to the calling function
         if !(isWhiteTurn) {
-            // display move, in algebraic notation, on display
-            theChessBoard.vc.dispMove.text! = firstHalfMove!
-            theChessBoard.vc.dispMove.text! +=  " \(thePiece ?? "")"
-            theChessBoard.vc.dispMove.text! += capture!
-            //theChessBoard.vc.dispMove.text! += "\(algebraicSourcePosition ?? "")"
-            theChessBoard.vc.dispMove.text! += "\(algebraicDestPosition ?? "")"
-            theChessBoard.vc.dispMove.textColor = isWhiteTurn ? #colorLiteral(red: 0.9999960065, green: 1, blue: 1, alpha: 1) : #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
-            
-            // debugging
-            print (theChessBoard.vc.dispMove.text!)
-            
+            // generate text string in algebraic notation to return
+            moveText = firstHalfMove!
+            moveText += " \(thePiece ?? "")"
+            moveText += capture!
+            moveText += "\(algebraicDestPosition ?? "")"
         } else {
             firstHalfMove! = "\(moveCount ?? 0): \(thePiece ?? "")"
             firstHalfMove! += capture!
@@ -298,6 +295,7 @@ class ChessGame: NSObject {
             firstHalfMove! += "\(algebraicDestPosition ?? "")"
         }
         
+        return !(isWhiteTurn) ? moveText : ""
     }
     
     
