@@ -14,6 +14,7 @@ class ChessGame: NSObject {
     var moveCount:Int?                          // track move count for move display
     var firstHalfMove:String?                   // save current move until opponent moves
     var pieceToRemove:Piece?                    // global variable for piece (if any) at dest square
+
     
     init(viewController: ViewController) {
         theChessBoard = ChessBoard.init(viewController: viewController)
@@ -154,22 +155,27 @@ class ChessGame: NSObject {
     
     
     // calculate the algebraic notation version of the move then return it to caller
+    // std chess notation used is ranks:1 2 3 4 5 6 7 8 | files:a b c d e f g h | pieces:R N B Q K
     func calcAlgebraicNotation(piece chessPieceToMove: UIChessPiece, fromIndex sourceIndex: BoardIndex, toIndex destIndex: BoardIndex) -> String {
         
-        var algebraicSourcePosition:String?
-        var algebraicDestPosition:String?
-        var conversion:Int?
-        var thisPiece:String?
-        var capture:String?
+        var algebraicSourcePosition:String?         // std chess notation for source position
+        var algebraicDestPosition:String?           // std chess notation for destination position
+        var conversion:Int?                         // conversion value (boardIndex to std chess)
+        var thisPiece:String?                       // std chess id of piece being moved
+        var captureMade:Bool                        // true if capture being made false if not
+        var moveText:String?                        // string containing std chess notation of
+                                                    // both halfs of current move - returned to caller
         
         // set capture string to "x" if the target square was not empty (Dummy)
+        // note:  pieceToRemove is a global variable for this class (ChessGame.swift)
         if pieceToRemove is Dummy {
-            capture = ""
+            captureMade = false
         } else {
-            capture = "x"
+            captureMade = true
         }
         
-        // set thePiece value based on class of piece
+        // set thisPiece string value
+        // to std chess notation id of piece
         if (chessPieceToMove is Pawn) {
             thisPiece = ""
         }
@@ -272,12 +278,11 @@ class ChessGame: NSObject {
         }
         
         // if capture was made by pawn alter the algebraicDestPosition string accordingly
-        if capture == "x" && thisPiece == "" {
+        if captureMade && (chessPieceToMove is Pawn) {
             algebraicDestPosition = (algebraicSourcePosition?.prefix(1))! + "x" + algebraicDestPosition!
-            capture = ""
+            captureMade = false
         }
         
-        var moveText = ""
         // if it was black's turn it's time to construct the move string
         // and return it to the calling function
         // if it was white's turn then save the move to firstHalfMove
@@ -285,17 +290,17 @@ class ChessGame: NSObject {
         if !(isWhiteTurn) {
             // generate text string in algebraic notation to return
             moveText = firstHalfMove!
-            moveText += " \(thisPiece ?? "")"
-            moveText += capture!
-            moveText += "\(algebraicDestPosition ?? "")"
+            moveText! += " \(thisPiece ?? "")"
+            moveText! += captureMade ? "x" : ""
+            moveText! += "\(algebraicDestPosition ?? "")"
         } else {
             firstHalfMove! = "\(moveCount ?? 0): \(thisPiece ?? "")"
-            firstHalfMove! += capture!
+            firstHalfMove! += captureMade ? "x" : ""
             //firstHalfMove! += "\(algebraicSourcePosition ?? "")"
             firstHalfMove! += "\(algebraicDestPosition ?? "")"
         }
         
-        return !(isWhiteTurn) ? moveText : ""
+        return !(isWhiteTurn) ? moveText! : ""
     }
     
     
