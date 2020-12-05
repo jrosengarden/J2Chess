@@ -158,8 +158,8 @@ class ChessGame: NSObject {
         
         var algebraicSourcePosition:String?
         var algebraicDestPosition:String?
-        var correction:Int?
-        var thePiece:String?
+        var conversion:Int?
+        var thisPiece:String?
         var capture:String?
         
         // set capture string to "x" if the target square was not empty (Dummy)
@@ -171,108 +171,108 @@ class ChessGame: NSObject {
         
         // set thePiece value based on class of piece
         if (chessPieceToMove is Pawn) {
-            thePiece = ""
+            thisPiece = ""
         }
         if (chessPieceToMove is Rook) {
-            thePiece = "R"
+            thisPiece = "R"
         }
         if (chessPieceToMove is Knight) {
-            thePiece = "N"
+            thisPiece = "N"
         }
         if (chessPieceToMove is Bishop) {
-            thePiece = "B"
+            thisPiece = "B"
         }
         if (chessPieceToMove is Queen) {
-            thePiece = "Q"
+            thisPiece = "Q"
         }
         if (chessPieceToMove is King) {
-            thePiece = "K"
+            thisPiece = "K"
         }
         
 
         // convert sourceIndex.row to algebraic notation value
         switch sourceIndex.row {
         case 7:
-            correction = 1
+            conversion = 1
         case 6:
-            correction = 2
+            conversion = 2
         case 5:
-            correction = 3
+            conversion = 3
         case 4:
-            correction = 4
+            conversion = 4
         case 3:
-            correction = 5
+            conversion = 5
         case 2:
-            correction = 6
+            conversion = 6
         case 1:
-            correction = 7
+            conversion = 7
         default:
-            correction = 8
+            conversion = 8
         }
         
         // set final source position to algebraic notation
         switch sourceIndex.col {
         case 0:
-            algebraicSourcePosition = "a" + String(correction!)
+            algebraicSourcePosition = "a" + String(conversion!)
         case 1:
-            algebraicSourcePosition = "b" + String(correction!)
+            algebraicSourcePosition = "b" + String(conversion!)
         case 2:
-            algebraicSourcePosition = "c" + String(correction!)
+            algebraicSourcePosition = "c" + String(conversion!)
         case 3:
-            algebraicSourcePosition = "d" + String(correction!)
+            algebraicSourcePosition = "d" + String(conversion!)
         case 4:
-            algebraicSourcePosition = "e" + String(correction!)
+            algebraicSourcePosition = "e" + String(conversion!)
         case 5:
-            algebraicSourcePosition = "f" + String(correction!)
+            algebraicSourcePosition = "f" + String(conversion!)
         case 6:
-            algebraicSourcePosition = "g" + String(correction!)
+            algebraicSourcePosition = "g" + String(conversion!)
         default:
-            algebraicSourcePosition = "h" + String(correction!)
+            algebraicSourcePosition = "h" + String(conversion!)
         }
 
         
         // convert destIndex.row to algebraic notation value
         switch destIndex.row {
         case 7:
-            correction = 1
+            conversion = 1
         case 6:
-            correction = 2
+            conversion = 2
         case 5:
-            correction = 3
+            conversion = 3
         case 4:
-            correction = 4
+            conversion = 4
         case 3:
-            correction = 5
+            conversion = 5
         case 2:
-            correction = 6
+            conversion = 6
         case 1:
-            correction = 7
+            conversion = 7
         default:
-            correction = 8
+            conversion = 8
         }
         
         // set final destination position to algebraic notation
         switch destIndex.col {
         case 0:
-            algebraicDestPosition = "a" + String(correction!)
+            algebraicDestPosition = "a" + String(conversion!)
         case 1:
-            algebraicDestPosition = "b" + String(correction!)
+            algebraicDestPosition = "b" + String(conversion!)
         case 2:
-            algebraicDestPosition = "c" + String(correction!)
+            algebraicDestPosition = "c" + String(conversion!)
         case 3:
-            algebraicDestPosition = "d" + String(correction!)
+            algebraicDestPosition = "d" + String(conversion!)
         case 4:
-            algebraicDestPosition = "e" + String(correction!)
+            algebraicDestPosition = "e" + String(conversion!)
         case 5:
-            algebraicDestPosition = "f" + String(correction!)
+            algebraicDestPosition = "f" + String(conversion!)
         case 6:
-            algebraicDestPosition = "g" + String(correction!)
+            algebraicDestPosition = "g" + String(conversion!)
         default:
-            algebraicDestPosition = "h" + String(correction!)
+            algebraicDestPosition = "h" + String(conversion!)
         }
         
         // if capture was made by pawn alter the algebraicDestPosition string accordingly
-        if capture == "x" && thePiece == "" {
+        if capture == "x" && thisPiece == "" {
             algebraicDestPosition = (algebraicSourcePosition?.prefix(1))! + "x" + algebraicDestPosition!
             capture = ""
         }
@@ -285,11 +285,11 @@ class ChessGame: NSObject {
         if !(isWhiteTurn) {
             // generate text string in algebraic notation to return
             moveText = firstHalfMove!
-            moveText += " \(thePiece ?? "")"
+            moveText += " \(thisPiece ?? "")"
             moveText += capture!
             moveText += "\(algebraicDestPosition ?? "")"
         } else {
-            firstHalfMove! = "\(moveCount ?? 0): \(thePiece ?? "")"
+            firstHalfMove! = "\(moveCount ?? 0): \(thisPiece ?? "")"
             firstHalfMove! += capture!
             //firstHalfMove! += "\(algebraicSourcePosition ?? "")"
             firstHalfMove! += "\(algebraicDestPosition ?? "")"

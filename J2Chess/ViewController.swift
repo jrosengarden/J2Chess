@@ -86,11 +86,8 @@ class ViewController: UIViewController {
                 myChessGame.move(piece: pieceDragged, fromIndex: sourceIndex, toIndex: destIndex, toOrigin: destOrigin)
                 
                 // show move, in algebraic notation, on screen
-                self.dispMove.text = myChessGame.calcAlgebraicNotation(piece: pieceDragged, fromIndex: sourceIndex, toIndex: destIndex)
-                // debugging
-                if self.dispMove.text != "" {
-                    print (self.dispMove.text!)
-                }
+                displayMove(fromSourceSquare: sourceIndex, toDestSquare: destIndex)
+
                 
                 // flip value of isWhiteTurn
                 myChessGame.nextTurn()
@@ -118,6 +115,14 @@ class ViewController: UIViewController {
         piece.center = CGPoint(x: translation.x + piece.center.x, y: translation.y + piece.center.y)
         
         gestureRecognizer.setTranslation(CGPoint.zero, in: view)
+    }
+    
+    func displayMove(fromSourceSquare: BoardIndex, toDestSquare: BoardIndex) {
+        self.dispMove.text = myChessGame.calcAlgebraicNotation(piece: pieceDragged, fromIndex: fromSourceSquare, toIndex: toDestSquare)
+        // debugging
+        if self.dispMove.text != "" {
+            print (self.dispMove.text!)
+        }
     }
 
 
