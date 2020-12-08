@@ -161,51 +161,24 @@ class ChessGame: NSObject {
             if !(piece as! Rook).doesMoveSeemFine(fromIndex: source, toIndex: dest) {
                 return false
             }
-            
-            // advanced check of legal pawn movement with full consideration of board state
-            var moveForward:Int = 0
-            if dest.row > source.row || dest.col > source.col{
-                moveForward = 1
-            } else {
-                moveForward = -1
-            }
-            
-            // insure all passed squares don't contain any pieces
-            // .....if remaining in same column
-            if (source.col == dest.col) {
-                var rowValue:Int = source.row + moveForward
-                while (rowValue != dest.row) {
-                    if !(theChessBoard.board[rowValue][source.col] is Dummy) {
-                        return false
-                    }
-                    rowValue += moveForward
-                }
-            // .....if remaining in same row
-            } else if (source.row == dest.row) {
-                var colValue:Int = source.col + moveForward
-                while (colValue != dest.col) {
-                    if !(theChessBoard.board[source.row][colValue] is Dummy) {
-                        return false
-                    }
-                    colValue += moveForward
-                }
-            }
-            
-            // no pieces in passed squares
-            return true
+            // advanced check of legal rook movement with full consideration of board state
+            return isValidHorizontalVertialMovement(fromIndex: source, toIndex: dest)
+
         case is Bishop:
             // basic check of legal bishop movement (no consideration of board state)
             if !(piece as! Bishop).doesMoveSeemFine(fromIndex: source, toIndex: dest) {
                 return false
             }
+            // advanced check of legal bishop movement with full consideration of board state
+            return isValidDiagonalMovement(fromIndex: source, toIndex: dest)
         default:
             // basic check of legal queen movement (no consideration of board state)
             if !(piece as! Queen).doesMoveSeemFine(fromIndex: source, toIndex: dest) {
                 return false
             }
+            // advanced check of legal queen movement with full consideration of board state
+            return (isValidHorizontalVertialMovement(fromIndex: source, toIndex: dest) && isValidDiagonalMovement(fromIndex: source, toIndex: dest))
         }
-        
-        return true
     }
     
     func isMoveValid(forKing king: King, fromIndex source: BoardIndex, toIndex dest: BoardIndex) -> Bool {
@@ -213,6 +186,45 @@ class ChessGame: NSObject {
         if !king.doesMoveSeemFine(fromIndex: source, toIndex: dest) {
             return false
         }
+        return true
+    }
+    
+    func isValidDiagonalMovement(fromIndex source: BoardIndex, toIndex dest: BoardIndex) -> Bool {
+        
+        return true
+    }
+    
+    func isValidHorizontalVertialMovement(fromIndex source: BoardIndex, toIndex dest: BoardIndex) -> Bool {
+        
+        var moveForward:Int = 0
+        if dest.row > source.row || dest.col > source.col{
+            moveForward = 1
+        } else {
+            moveForward = -1
+        }
+        
+        // insure all passed squares don't contain any pieces
+        // .....if remaining in same column
+        if (source.col == dest.col) {
+            var rowValue:Int = source.row + moveForward
+            while (rowValue != dest.row) {
+                if !(theChessBoard.board[rowValue][source.col] is Dummy) {
+                    return false
+                }
+                rowValue += moveForward
+            }
+        // .....if remaining in same row
+        } else if (source.row == dest.row) {
+            var colValue:Int = source.col + moveForward
+            while (colValue != dest.col) {
+                if !(theChessBoard.board[source.row][colValue] is Dummy) {
+                    return false
+                }
+                colValue += moveForward
+            }
+        }
+        
+        // no pieces in passed squares
         return true
     }
     
