@@ -162,7 +162,7 @@ class ChessGame: NSObject {
                 return false
             }
             // advanced check of legal rook movement with full consideration of board state
-            return isValidHorizontalVertialMovement(fromIndex: source, toIndex: dest)
+            return isValidHorizontalVerticalMovement(fromIndex: source, toIndex: dest)
 
         case is Bishop:
             // basic check of legal bishop movement (no consideration of board state)
@@ -177,7 +177,7 @@ class ChessGame: NSObject {
                 return false
             }
             // advanced check of legal queen movement with full consideration of board state
-            return (isValidHorizontalVertialMovement(fromIndex: source, toIndex: dest) && isValidDiagonalMovement(fromIndex: source, toIndex: dest))
+            return (isValidHorizontalVerticalMovement(fromIndex: source, toIndex: dest) && isValidDiagonalMovement(fromIndex: source, toIndex: dest))
         }
     }
     
@@ -194,7 +194,7 @@ class ChessGame: NSObject {
         return true
     }
     
-    func isValidHorizontalVertialMovement(fromIndex source: BoardIndex, toIndex dest: BoardIndex) -> Bool {
+    func isValidHorizontalVerticalMovement(fromIndex source: BoardIndex, toIndex dest: BoardIndex) -> Bool {
         
         var moveForward:Int = 0
         if dest.row > source.row || dest.col > source.col{
