@@ -111,11 +111,29 @@ class ChessGame: NSObject {
     
     func isMoveValid(forRookOrBishopOrQueen piece: UIChessPiece, fromIndex source: BoardIndex, toIndex dest: BoardIndex) -> Bool {
         
+        switch piece {
+        case is Rook:
+            if !(piece as! Rook).doesMoveSeemFine(fromIndex: source, toIndex: dest) {
+                return false
+            }
+        case is Bishop:
+            if !(piece as! Bishop).doesMoveSeemFine(fromIndex: source, toIndex: dest) {
+                return false
+            }
+        default:
+            if !(piece as! Queen).doesMoveSeemFine(fromIndex: source, toIndex: dest) {
+                return false
+            }
+        }
+        
         return true
     }
     
     func isMoveValid(forKing king: King, fromIndex source: BoardIndex, toIndex dest: BoardIndex) -> Bool {
     
+        if !king.doesMoveSeemFine(fromIndex: source, toIndex: dest) {
+            return false
+        }
         return true
     }
     
