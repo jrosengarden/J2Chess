@@ -157,14 +157,49 @@ class ChessGame: NSObject {
         
         switch piece {
         case is Rook:
+            // basic check of legal rook movement (no consideration of board state)
             if !(piece as! Rook).doesMoveSeemFine(fromIndex: source, toIndex: dest) {
                 return false
             }
+            
+            // advanced check of legal pawn movement with full consideration of board state
+            var moveForward:Int = 0
+            if dest.row > source.row || dest.col > source.col{
+                moveForward = 1
+            } else {
+                moveForward = -1
+            }
+            
+            // insure all passed squares don't contain any pieces
+            // .....if remaining in same column
+            if (source.col == dest.col) {
+                var rowValue:Int = source.row + moveForward
+                while (rowValue != dest.row) {
+                    if !(theChessBoard.board[rowValue][source.col] is Dummy) {
+                        return false
+                    }
+                    rowValue += moveForward
+                }
+            // .....if remaining in same row
+            } else if (source.row == dest.row) {
+                var colValue:Int = source.col + moveForward
+                while (colValue != dest.col) {
+                    if !(theChessBoard.board[source.row][colValue] is Dummy) {
+                        return false
+                    }
+                    colValue += moveForward
+                }
+            }
+            
+            // no pieces in passed squares
+            return true
         case is Bishop:
+            // basic check of legal bishop movement (no consideration of board state)
             if !(piece as! Bishop).doesMoveSeemFine(fromIndex: source, toIndex: dest) {
                 return false
             }
         default:
+            // basic check of legal queen movement (no consideration of board state)
             if !(piece as! Queen).doesMoveSeemFine(fromIndex: source, toIndex: dest) {
                 return false
             }
