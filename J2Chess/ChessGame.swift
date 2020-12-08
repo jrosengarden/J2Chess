@@ -23,7 +23,7 @@ class ChessGame: NSObject {
     }
     
     func move(piece chessPieceToMove: UIChessPiece, fromIndex sourceIndex: BoardIndex, toIndex destIndex: BoardIndex, toOrigin destOrigin: CGPoint) {
-    
+
         // get initial chess piece frame
         let initialChessPieceFrame = chessPieceToMove.frame
     
@@ -82,6 +82,40 @@ class ChessGame: NSObject {
                 return false
                 }
         
+        switch piece {
+        case is Pawn:
+            return isMoveValid(forPawn: piece as! Pawn, fromIndex: source, toIndex: dest)
+        case is Rook, is Bishop, is Queen:
+            return isMoveValid(forRookOrBishopOrQueen: piece, fromIndex: source, toIndex: dest)
+        case is Knight:
+            if !(piece as! Knight).doesMoveSeemFine(fromIndex: source, toIndex: dest) {
+                return false
+            }
+            break
+        case is King:
+            return isMoveValid(forKing: piece as! King, fromIndex: source, toIndex: dest)
+        default:
+            break
+        }
+        
+        return true
+    }
+    
+    func isMoveValid(forPawn pawn: Pawn, fromIndex source: BoardIndex, toIndex dest: BoardIndex) -> Bool {
+        
+        if !pawn.doesMoveSeemFine(fromIndex: source, toIndex: dest) {
+            return false
+        }
+        return true
+    }
+    
+    func isMoveValid(forRookOrBishopOrQueen piece: UIChessPiece, fromIndex source: BoardIndex, toIndex dest: BoardIndex) -> Bool {
+        
+        return true
+    }
+    
+    func isMoveValid(forKing king: King, fromIndex source: BoardIndex, toIndex dest: BoardIndex) -> Bool {
+    
         return true
     }
     

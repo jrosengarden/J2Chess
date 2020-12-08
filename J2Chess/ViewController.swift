@@ -123,6 +123,8 @@ class ViewController: UIViewController {
         if self.dispMove.text != "" {
             print (self.dispMove.text!)
         }
+
+
     }
 
 
