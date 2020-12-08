@@ -103,14 +103,74 @@ class ChessGame: NSObject {
     
     func isMoveValid(forPawn pawn: Pawn, fromIndex source: BoardIndex, toIndex dest: BoardIndex) -> Bool {
         
+        // basic check of legal pawn movement (no consideration of board state)
         if !pawn.doesMoveSeemFine(fromIndex: source, toIndex: dest) {
             return false
         }
-        return true
+        
+        // advanced check of legal pawn movement with full consideration of board state
+        
+        // no attack (remaining in same column)
+        if source.col == dest.col {
+            // if pawn advanced by 2
+            // insure there were no chess pieces in the 1st square or the dest square
+            if pawn.hasAdvancedByTwo {
+                var moveForward = 0         // variable to check square pawn moved past
+                
+                // set moveForward based on color of moving piece
+                if pawn.color == #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1) {
+                    moveForward = 1
+                } else {
+                    moveForward = -1
+                }
+        
+                // if the dest square is a Dummy and the square the pawn moved past is a dummy
+                // then we have a good move
+                if theChessBoard.board[dest.row][dest.col] is Dummy && theChessBoard.board[dest.row - moveForward][dest.col] is Dummy {
+                    return true
+                }
+            // if pawn advanced by 1
+            // insure there is no chess piece in the dest square
+            } else {
+                // if the dest square is a dummy then we have a good move
+                if theChessBoard.board[dest.row][dest.col] is Dummy {
+                    return true
+                }
+            }
+        } else {
+        // attacking some piece (changing column to the left or right)
+        // insure the dest square is NOT a Dummy (actually has a chess piece on it)
+            if !(theChessBoard.board[dest.row][dest.col] is Dummy) {
+                return true
+            }
+            
+        }
+        
+        // falling thru to this point means all of the checks failed so
+        // it is definitely an illegal move from a legal chess move point of view
+        // and/or from the state of the board (pieces in the way, nothing to attack, etc.)
+        return false
     }
     
     func isMoveValid(forRookOrBishopOrQueen piece: UIChessPiece, fromIndex source: BoardIndex, toIndex dest: BoardIndex) -> Bool {
         
+        switch piece {
+        case is Rook:
+            // basic check of legal rook movement (no consideration of board state)
+            if !(piece as! Rook).doesMoveSeemFine(fromIndex: source, toIndex: dest) {
+                return false
+            }
+        case is Bishop:
+            // basic check of legal bishop movement (no consideration of board state)
+            if !(piece as! Bishop).doesMoveSeemFine(fromIndex: source, toIndex: dest) {
+                return false
+            }
+        default:
+            // basic check of legal queen movement (no consideration of board state)
+            if !(piece as! Queen).doesMoveSeemFine(fromIndex: source, toIndex: dest) {
+                return false
+            }
+        }
         return true
     }
     
