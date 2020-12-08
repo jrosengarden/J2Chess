@@ -32,9 +32,9 @@ class Queen: UIChessPiece {
         
         if abs(source.col - dest.col) == abs(source.row - dest.row) || (((dest.row > source.row) || (dest.row < source.row)) && (dest.col == source.col)) || (((dest.col > source.col) || (dest.col < source.col)) && (source.row == dest.row)) {
             return true
-        } else {
-            return false
         }
+        
+        return false
     }
     
     required init(coder aDecoder: NSCoder) {

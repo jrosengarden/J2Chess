@@ -32,9 +32,9 @@ class Rook: UIChessPiece {
         
         if ((dest.row > source.row || dest.row < source.row) && (dest.col == source.col) || (dest.col > source.col || dest.col < source.col) && (source.row == dest.row))  {
             return true
-        } else {
-            return false
         }
+        
+        return false
         
     }
     

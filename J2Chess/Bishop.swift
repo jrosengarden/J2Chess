@@ -32,9 +32,9 @@ class Bishop: UIChessPiece {
         
         if abs(source.col - dest.col) == abs(source.row - dest.row) {
             return true
-        } else {
-            return false
         }
+        
+        return false
     }
     
     required init(coder aDecoder: NSCoder) {

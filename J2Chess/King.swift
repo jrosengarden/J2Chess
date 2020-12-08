@@ -30,11 +30,11 @@ class King: UIChessPiece {
     
     func doesMoveSeemFine(fromIndex source: BoardIndex, toIndex dest: BoardIndex) -> Bool {
         
-        if (dest.row == source.row + 1 || dest.row == source.row - 1) || (dest.col == source.col + 1 || dest.col == source.col - 1 ) {
+        if abs(dest.row - source.row) == 1 || abs(dest.col - source.col) == 1 {
             return true
-        } else {
-            return false
         }
+        
+        return false
         
     }
     
