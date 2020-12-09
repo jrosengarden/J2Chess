@@ -191,12 +191,46 @@ class ChessGame: NSObject {
     
     func isValidDiagonalMovement(fromIndex source: BoardIndex, toIndex dest: BoardIndex) -> Bool {
         
+        var moveX:Int = 0
+        var moveY:Int = 0
+        
+        // set y axis increment value
+        if dest.row > source.row {
+            moveY = 1
+        } else {
+            moveY = -1
+        }
+        
+        // set x axis increment value
+        if dest.col > source.col {
+            moveX = 1
+        } else {
+            moveX = -1
+        }
+        
+        // set initial coordinates for square to check
+        var rowValue:Int = source.row + moveY
+        var colValue:Int = source.col + moveX
+        
+        // insure all passed squares (except dest square) don't contain pieces
+        while (rowValue != dest.row) && (colValue != dest.col) {
+            if !(theChessBoard.board[rowValue][colValue] is Dummy) {
+                return false
+            }
+            // increment x,y coordinates
+            rowValue += moveY
+            colValue += moveX
+        }
+        
+        // no pieces in passed squares
         return true
     }
     
     func isValidHorizontalVerticalMovement(fromIndex source: BoardIndex, toIndex dest: BoardIndex) -> Bool {
         
         var moveForward:Int = 0
+        
+        // set increment value
         if dest.row > source.row || dest.col > source.col{
             moveForward = 1
         } else {
