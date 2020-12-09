@@ -30,7 +30,7 @@ class Bishop: UIChessPiece {
     
     func doesMoveSeemFine(fromIndex source: BoardIndex, toIndex dest: BoardIndex) -> Bool {
         
-        if abs(source.col - dest.col) == abs(source.row - dest.row) {
+        if abs(dest.row - source.row) == abs(dest.col - source.col) {
             return true
         }
         
