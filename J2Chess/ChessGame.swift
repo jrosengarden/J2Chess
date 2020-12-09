@@ -177,7 +177,7 @@ class ChessGame: NSObject {
                 return false
             }
             // advanced check of legal queen movement with full consideration of board state
-            return (isValidHorizontalVerticalMovement(fromIndex: source, toIndex: dest) && isValidDiagonalMovement(fromIndex: source, toIndex: dest))
+            return (isValidHorizontalVerticalMovement(fromIndex: source, toIndex: dest) || isValidDiagonalMovement(fromIndex: source, toIndex: dest))
         }
     }
     
@@ -189,10 +189,16 @@ class ChessGame: NSObject {
         return true
     }
     
+    // function called by Bishop or Queen
     func isValidDiagonalMovement(fromIndex source: BoardIndex, toIndex dest: BoardIndex) -> Bool {
         
         var moveX:Int = 0
         var moveY:Int = 0
+        
+        // if not diagonal movement (only possible if called by Queen)
+        if source.col == dest.col || source.row == dest.row {
+            return false
+        }
         
         // set y axis increment value
         if dest.row > source.row {
@@ -226,9 +232,15 @@ class ChessGame: NSObject {
         return true
     }
     
+    // function called by Rook or Queen
     func isValidHorizontalVerticalMovement(fromIndex source: BoardIndex, toIndex dest: BoardIndex) -> Bool {
         
         var moveForward:Int = 0
+        
+        // if not horizontal/vertical movement (only possible if called by Queen)
+        if source.col != dest.col && source.row != dest.row {
+            return false
+        }
         
         // set increment value
         if dest.row > source.row || dest.col > source.col{
