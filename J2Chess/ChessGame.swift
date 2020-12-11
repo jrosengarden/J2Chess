@@ -209,7 +209,53 @@ class ChessGame: NSObject {
     
     func isMoveValid(forKing king: King, fromIndex source: BoardIndex, toIndex dest: BoardIndex) -> Bool {
     
+        // basic check of legal king movement (no consideration of board state)
+        if !(king.doesMoveSeemFine(fromIndex: source, toIndex: dest)) {
+            return false
+        }
+        
+        // advanced check of legal king movement with full consideration of board state
+        if isOpponentKing(nearKing: king, thatGoesTo: dest) {
+            return false
+        }
+        
         return true
+    }
+    
+    func isOpponentKing(nearKing movingKing: King, thatGoesTo destIndexOfMovingKing: BoardIndex) -> Bool {
+
+        // which king is the current opponent king
+        var theOpponentKing: King 
+        
+        if movingKing == theChessBoard.whiteKing {
+            theOpponentKing = theChessBoard.blackKing
+        } else {
+            theOpponentKing = theChessBoard.whiteKing
+        }
+        
+        // get index of opponent king
+        var indexOfOppenentKing: BoardIndex!
+        
+        for row in 0..<theChessBoard.ROWS {
+            for col in 0..<theChessBoard.COLS {
+                if let aKing = theChessBoard.board[row][col] as? King, aKing == theOpponentKing {
+                    indexOfOppenentKing = BoardIndex(row: row, col: col)
+                }
+            }
+        }
+
+        // compute absolute difference between kings
+        let differenceInRows = abs(indexOfOppenentKing.row - destIndexOfMovingKing.row)
+        let differenceInColsl = abs(indexOfOppenentKing.col - destIndexOfMovingKing.col)
+        
+        // if they're too close, move is invalid
+        if case 0...1 = differenceInRows{
+            if case 0...1 = differenceInColsl{
+                return true
+            }
+        }
+        
+        return false
     }
     
     // function to flip value of isWhiteTurn

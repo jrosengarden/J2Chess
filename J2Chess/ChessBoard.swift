@@ -83,7 +83,8 @@ class ChessBoard: NSObject {
                     case 3:
                         board[row][col] = Queen(frame: ChessBoard.getFrame(forRow: row, forCol: col), color:#colorLiteral(red: 0, green: 0, blue: 0, alpha: 1), vc: vc)
                     case 4:
-                        board[row][col] = King(frame: ChessBoard.getFrame(forRow: row, forCol: col), color:#colorLiteral(red: 0, green: 0, blue: 0, alpha: 1), vc: vc)
+                        blackKing = King(frame: ChessBoard.getFrame(forRow: row, forCol: col), color:#colorLiteral(red: 0, green: 0, blue: 0, alpha: 1), vc: vc)
+                        board[row][col] = blackKing
                     case 5:
                         board[row][col] = Bishop(frame: ChessBoard.getFrame(forRow: row, forCol: col), color:#colorLiteral(red: 0, green: 0, blue: 0, alpha: 1), vc: vc)
                     case 6:
@@ -106,7 +107,8 @@ class ChessBoard: NSObject {
                     case 3:
                         board[row][col] = Queen(frame: ChessBoard.getFrame(forRow: row, forCol: col), color:#colorLiteral(red: 0.9999960065, green: 1, blue: 1, alpha: 1), vc: vc)
                     case 4:
-                        board[row][col] = King(frame: ChessBoard.getFrame(forRow: row, forCol: col), color:#colorLiteral(red: 0.9999960065, green: 1, blue: 1, alpha: 1), vc: vc)
+                        whiteKing = King(frame: ChessBoard.getFrame(forRow: row, forCol: col), color:#colorLiteral(red: 0.9999960065, green: 1, blue: 1, alpha: 1), vc: vc)
+                        board[row][col] = whiteKing
                     case 5:
                         board[row][col] = Bishop(frame: ChessBoard.getFrame(forRow: row, forCol: col), color:#colorLiteral(red: 0.9999960065, green: 1, blue: 1, alpha: 1), vc: vc)
                     case 6:
