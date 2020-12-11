@@ -171,6 +171,39 @@ class ChessGame: NSObject {
                 return false
             }
         }
+        
+        // advanced check for bishop/rook/queen
+        var increaseRow:Int = 0
+        
+        // set what increaseRow is will be for each iteration
+        if dest.row - source.row != 0 {
+            increaseRow = (dest.row - source.row) / abs(dest.row - source.row)
+        }
+        
+        var increaseCol:Int = 0
+        
+        // set what increaseCol will be for each iteration
+        if dest.col - source.col != 0 {
+            increaseCol = (dest.col - source.col) / abs(dest.col - source.col)
+        }
+        
+        var nextRow:Int = source.row + increaseRow
+        var nextCol:Int = source.col + increaseCol
+        
+        // check each square being passed over
+        // if any square contains a chess piece then we're done
+        // and the move will fail
+        while nextRow != dest.row || nextCol != dest.col {
+            if !(theChessBoard.board[nextRow][nextCol] is Dummy) {
+                return false
+            }
+            
+            nextRow += increaseRow
+            nextCol += increaseCol
+        }
+        
+        
+        
         return true
     }
     
