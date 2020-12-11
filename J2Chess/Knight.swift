@@ -30,7 +30,14 @@ class Knight: UIChessPiece {
     
     func doesMoveSeemFine(fromIndex source: BoardIndex, toIndex dest: BoardIndex) -> Bool {
         
-        return true
+        let rowsMoved = abs(dest.row - source.row)
+        let colsMoved = abs(dest.col - source.col)
+        
+        if rowsMoved == 1 && colsMoved == 2 || rowsMoved == 2 && colsMoved == 1 {
+            return true
+        }
+        
+        return false
     }
     
     required init(coder aDecoder: NSCoder) {
