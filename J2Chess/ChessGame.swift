@@ -11,7 +11,7 @@ class ChessGame: NSObject {
     
     var theChessBoard: ChessBoard!
     var isWhiteTurn:Bool = true                 // variable to track which color's turn it is
-    var winner: String?
+    var winner: String?                         // set by didSomeBodyWin() function
     
     var moveCount:Int?                          // track move count for move display
     var firstHalfMove:String?                   // save current move until opponent moves
@@ -29,6 +29,7 @@ class ChessGame: NSObject {
         
     }
     
+    // only returns true if one of the kings is no longer on the board
     func isGameOver() -> Bool {
         if didSomeBodyWin() {
             return true
@@ -36,6 +37,7 @@ class ChessGame: NSObject {
         return false
     }
     
+    // decides winner by checking for each color's king
     func didSomeBodyWin() -> Bool {
         if !theChessBoard.vc.chessPieces.contains(theChessBoard.whiteKing) {
             winner = "Black"

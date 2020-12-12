@@ -22,6 +22,9 @@ class ViewController: UIViewController {
     static var TILE_SIZE: Int = 40
     var myChessGame: ChessGame!
     var chessPieces: [UIChessPiece]!
+    
+    // set in StartScreen.swift class based on which button was pressed
+    // if playing computer set to true, if playing another human set to false
     var isAgainstAI: Bool!
     
     
@@ -88,7 +91,7 @@ class ViewController: UIViewController {
                 // show move, in algebraic notation, on screen
                 displayMove(fromSourceSquare: sourceIndex, toDestSquare: destIndex)
 
-                // check if game is over
+                // check if game is over and call displayWinner() if it is
                 if myChessGame.isGameOver() {
                     displayWinner()
                     return
@@ -107,14 +110,16 @@ class ViewController: UIViewController {
         }
     }
     
+    // displays multi-choice alert to user due to game being over
     func displayWinner() {
+        // set up main UIAlert
         let box = UIAlertController(title: "Game Over", message: "\(myChessGame.winner!) wins", preferredStyle: UIAlertController.Style.alert)
         // create a review board action
         box.addAction(UIAlertAction(title: "Review chess board", style: UIAlertAction.Style.default, handler:{
             action in
             // No action will just dismiss the alert
         }))
-        // create a back to main menu action
+        // create a back to main menu action using the unwind seque
         box.addAction(UIAlertAction(title: "Back to main menu", style: UIAlertAction.Style.default, handler: {
             action in self.performSegue(withIdentifier: "backToMainMenu", sender: self)
         }))

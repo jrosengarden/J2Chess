@@ -30,8 +30,9 @@ class StartScreen: UIViewController {
     
     
     
+    // just before transition to ViewController.swift (main chess game screen)
+    // set the isAgainstAI variable
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
                 
         let destVC = segue.destination as! ViewController
         
@@ -45,6 +46,7 @@ class StartScreen: UIViewController {
         
     }
     
+    // this seque allows return to start screen by naming it's identified as "backToMainMenu"
     @IBAction func unwind(seque: UIStoryboardSegue) {
         
     }
