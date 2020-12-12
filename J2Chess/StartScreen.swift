@@ -5,4 +5,9 @@
 //  Created by Jeff Rosengarden on 11/18/20.
 //
 
-import Foundation
+import UIKit
+
+
+class StartScreen: UIViewController {
+    
+}
