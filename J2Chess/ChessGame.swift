@@ -20,6 +20,9 @@ class ChessGame: NSObject {
         theChessBoard = ChessBoard.init(viewController: viewController)
         moveCount = 1
         firstHalfMove = ""
+        
+        theChessBoard.vc.dispMove.text = theChessBoard.vc.isAgainstAI ? "Single User Mode (You vs iPhone)" : "Multiplayer mode (You vs somebody else)"
+        
     }
     
     func move(piece chessPieceToMove: UIChessPiece, fromIndex sourceIndex: BoardIndex, toIndex destIndex: BoardIndex, toOrigin destOrigin: CGPoint) {
