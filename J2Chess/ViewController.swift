@@ -88,6 +88,11 @@ class ViewController: UIViewController {
                 // show move, in algebraic notation, on screen
                 displayMove(fromSourceSquare: sourceIndex, toDestSquare: destIndex)
 
+                // check if game is over
+                if myChessGame.isGameOver() {
+                    displayWinner()
+                    return
+                }
                 
                 // flip value of isWhiteTurn
                 myChessGame.nextTurn()
@@ -100,6 +105,40 @@ class ViewController: UIViewController {
             }
             
         }
+    }
+    
+    func displayWinner() {
+        let box = UIAlertController(title: "Game Over", message: "\(myChessGame.winner!) wins", preferredStyle: UIAlertController.Style.alert)
+        // create a review board action
+        box.addAction(UIAlertAction(title: "Review chess board", style: UIAlertAction.Style.default, handler:{
+            action in
+            // No action will just dismiss the alert
+        }))
+        // create a back to main menu action
+        box.addAction(UIAlertAction(title: "Back to main menu", style: UIAlertAction.Style.default, handler: {
+            action in self.performSegue(withIdentifier: "backToMainMenu", sender: self)
+        }))
+        
+        // create a rematch action
+        box.addAction(UIAlertAction(title: "Rematch", style: UIAlertAction.Style.default, handler: {
+            
+            action in
+            
+            // clear screen, chess pieces array, and board matrix
+            for chessPiece in self.chessPieces {
+                self.myChessGame.theChessBoard.remove(piece: chessPiece)
+            }
+            
+            // create new game
+            self.myChessGame = ChessGame(viewController: self)
+            
+            // update labels with game status
+            self.updateTurnOnScreen()
+            self.lblDisplayCheckOUTLET.text = nil
+            
+        }))
+        
+        self.present(box, animated: true, completion: nil)
     }
     
     // update screen text & color 

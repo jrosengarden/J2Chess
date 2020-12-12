@@ -82,8 +82,9 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Qf9-k1-1t5">
-                                <rect key="frame" x="22" y="614" width="337" height="0.0"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Testing" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Qf9-k1-1t5">
+                                <rect key="frame" x="22" y="554" width="337" height="0.0"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="20"/>
                                 <color key="textColor" red="0.58072251080000004" green="0.066734083" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
@@ -416,7 +417,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mqj-ry-SHM">
-                                <rect key="frame" x="30" y="531" width="318" height="21"/>
+                                <rect key="frame" x="30" y="513" width="318" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
@@ -426,11 +427,6 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemGray4Color"/>
                         <gestureRecognizers/>
-                        <constraints>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="Qf9-k1-1t5" secondAttribute="bottom" constant="53" id="Mi5-mI-B3V"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Qf9-k1-1t5" secondAttribute="trailing" constant="16" id="d4q-1j-d6m"/>
-                            <constraint firstItem="Qf9-k1-1t5" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="22" id="rF3-lR-d1Z"/>
-                        </constraints>
                         <connections>
                             <outletCollection property="gestureRecognizers" destination="81f-Qh-FuE" appends="YES" id="wOD-pg-4qh"/>
                         </connections>
@@ -441,9 +437,11 @@
                         <outlet property="lblDisplayCheckOUTLET" destination="Qf9-k1-1t5" id="WRL-7d-GRT"/>
                         <outlet property="lblDisplayTurnOUTLET" destination="OJ1-5c-GnJ" id="Bue-QN-UxT"/>
                         <outlet property="panOUTLET" destination="81f-Qh-FuE" id="Wlg-GV-cjg"/>
+                        <segue destination="tVe-uJ-FrU" kind="unwind" identifier="backToMainMenu" unwindAction="unwindWithSeque:" id="v66-vf-EQ8"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+                <exit id="tVe-uJ-FrU" userLabel="Exit" sceneMemberID="exit"/>
                 <panGestureRecognizer minimumNumberOfTouches="1" id="81f-Qh-FuE"/>
             </objects>
             <point key="canvasLocation" x="615.20000000000005" y="123.68815592203899"/>

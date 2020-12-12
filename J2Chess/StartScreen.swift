@@ -21,7 +21,7 @@ class StartScreen: UIViewController {
         self.navigationController!.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
         self.navigationController!.navigationBar.tintColor = #colorLiteral(red: 0.2934360504, green: 0.6425268054, blue: 0.7267915606, alpha: 1)
 
-        self.navigationItem.title = "J2Chess Main Menu"
+        self.navigationItem.title = "End game and return to main menu"
        
         // hide navbar on initial screen
         self.navigationItem.titleView = UIView()
@@ -42,6 +42,10 @@ class StartScreen: UIViewController {
         if segue.identifier == "multiplayer" {
             destVC.isAgainstAI = false
         }
+        
+    }
+    
+    @IBAction func unwind(seque: UIStoryboardSegue) {
         
     }
     

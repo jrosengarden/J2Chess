@@ -11,6 +11,8 @@ class ChessGame: NSObject {
     
     var theChessBoard: ChessBoard!
     var isWhiteTurn:Bool = true                 // variable to track which color's turn it is
+    var winner: String?
+    
     var moveCount:Int?                          // track move count for move display
     var firstHalfMove:String?                   // save current move until opponent moves
     var pieceToRemove:Piece?                    // global variable for piece (if any) at dest square
@@ -21,8 +23,29 @@ class ChessGame: NSObject {
         moveCount = 1
         firstHalfMove = ""
         
+        // on segue to chess board viewcontroller use the dispMove label to remind
+        // the user what mode was selected (in case they accidentally selected wrong mode)
         theChessBoard.vc.dispMove.text = theChessBoard.vc.isAgainstAI ? "Single User Mode (You vs iPhone)" : "Multiplayer mode (You vs somebody else)"
         
+    }
+    
+    func isGameOver() -> Bool {
+        if didSomeBodyWin() {
+            return true
+        }
+        return false
+    }
+    
+    func didSomeBodyWin() -> Bool {
+        if !theChessBoard.vc.chessPieces.contains(theChessBoard.whiteKing) {
+            winner = "Black"
+            return true
+        }
+        if !theChessBoard.vc.chessPieces.contains(theChessBoard.blackKing) {
+            winner = "White"
+            return true
+        }
+        return false
     }
     
     func move(piece chessPieceToMove: UIChessPiece, fromIndex sourceIndex: BoardIndex, toIndex destIndex: BoardIndex, toOrigin destOrigin: CGPoint) {
