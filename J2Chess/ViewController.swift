@@ -22,12 +22,12 @@ class ViewController: UIViewController {
     static var TILE_SIZE: Int = 40
     var myChessGame: ChessGame!
     var chessPieces: [UIChessPiece]!
+    var isAgainstAI: Bool!
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        
         chessPieces = []
         myChessGame = ChessGame.init(viewController: self)
     }
