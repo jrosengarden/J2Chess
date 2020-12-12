@@ -17,8 +17,8 @@ class ViewController: UIViewController {
     var pieceDragged: UIChessPiece!
     var sourceOrigin: CGPoint!
     var destOrigin: CGPoint!
-    static var SPACE_FROM_LEFT_EDGE: Int = 27
-    static var SPACE_FROM_TOP_EDGE: Int = 173
+    static var SPACE_FROM_LEFT_EDGE: Int = 28
+    static var SPACE_FROM_TOP_EDGE: Int = 110
     static var TILE_SIZE: Int = 40
     var myChessGame: ChessGame!
     var chessPieces: [UIChessPiece]!
