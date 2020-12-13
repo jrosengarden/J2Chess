@@ -446,16 +446,19 @@
             </objects>
             <point key="canvasLocation" x="615.20000000000005" y="123.68815592203899"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--Nav Controller-->
         <scene sceneID="WGK-fG-hSJ">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="T8c-Rz-7RJ" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="T8c-Rz-7RJ" customClass="NavController" customModule="J2Chess" customModuleProvider="target" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="TvS-nJ-ZAP">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
+                    <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="qzW-Xg-Uss">
+                        <autoresizingMask key="autoresizingMask"/>
+                    </toolbar>
                     <connections>
                         <segue destination="fXr-a1-3LJ" kind="relationship" relationship="rootViewController" id="EBd-1W-iDC"/>
                     </connections>

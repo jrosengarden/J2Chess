@@ -11,24 +11,22 @@ import UIKit
 class StartScreen: UIViewController {
     
     override func viewDidLoad() {
-    
-        // navbar configuration
-        self.navigationController!.navigationBar.barStyle = .black
-        self.navigationController?.navigationBar.barTintColor = UIColor.systemGray4
-
+            
+        super.viewDidLoad()
         
-        self.navigationController!.navigationBar.isTranslucent = false
-        self.navigationController!.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
-        self.navigationController!.navigationBar.tintColor = #colorLiteral(red: 0.2934360504, green: 0.6425268054, blue: 0.7267915606, alpha: 1)
-
+        // remove navBar borders (so they are invisible)
+        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for:.default)
+        self.navigationController?.navigationBar.shadowImage = UIImage()
+        self.navigationController?.navigationBar.layoutIfNeeded()
+        
+        // set navBar title
         self.navigationItem.title = "End game and return to main menu"
        
         // hide navbar on initial screen
         self.navigationItem.titleView = UIView()
 
     }
-    
-    
+   
     
     // just before transition to ViewController.swift (main chess game screen)
     // set the isAgainstAI variable

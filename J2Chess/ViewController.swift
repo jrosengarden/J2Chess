@@ -34,6 +34,8 @@ class ViewController: UIViewController {
         chessPieces = []
         myChessGame = ChessGame.init(viewController: self)
     }
+    
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         
         pieceDragged = touches.first!.view as? UIChessPiece
