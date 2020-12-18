@@ -527,11 +527,17 @@ class ChessGame: NSObject {
             moveText! += " \(thisPiece ?? "")"
             moveText! += captureMade ? "x" : ""
             moveText! += "\(algebraicDestPosition ?? "")"
+            if theChessBoard.vc.lblDisplayCheckOUTLET.text == "White is in check!" {
+                moveText! += "+"
+            }
         } else {
             firstHalfMove! = "\(moveCount ?? 0): \(thisPiece ?? "")"
             firstHalfMove! += captureMade ? "x" : ""
             //firstHalfMove! += "\(algebraicSourcePosition ?? "")"
             firstHalfMove! += "\(algebraicDestPosition ?? "")"
+            if theChessBoard.vc.lblDisplayCheckOUTLET.text == "Black is in check!" {
+                firstHalfMove! += "+"
+            }
         }
         
         return !(isWhiteTurn) ? moveText! : ""

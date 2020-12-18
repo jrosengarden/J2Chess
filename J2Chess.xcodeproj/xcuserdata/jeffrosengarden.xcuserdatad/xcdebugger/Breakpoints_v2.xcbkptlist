@@ -3,4 +3,23 @@
    uuid = "B4E5761B-13BB-4441-AE99-508810DBC053"
    type = "1"
    version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "65D8693E-95EF-4573-8E3E-2019231D8603"
+            shouldBeEnabled = "No"
+            condition = "theChessBoard.vc.lblDisplayCheckOUTLET.text != &quot;&quot;"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "J2Chess/ChessGame.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "519"
+            endingLineNumber = "519"
+            landmarkName = "calcAlgebraicNotation(piece:fromIndex:toIndex:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
 </Bucket>

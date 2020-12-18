@@ -90,6 +90,9 @@ class ViewController: UIViewController {
                 // move is valid so move the piece
                 myChessGame.move(piece: pieceDragged, fromIndex: sourceIndex, toIndex: destIndex, toOrigin: destOrigin)
                 
+                // display checks if there are any
+                displayCheck()
+                
                 // show move, in algebraic notation, on screen
                 displayMove(fromSourceSquare: sourceIndex, toDestSquare: destIndex)
 
@@ -98,9 +101,6 @@ class ViewController: UIViewController {
                     displayWinner()
                     return
                 }
-                
-                // display checks if there are any
-                displayCheck()
                 
                 // flip value of isWhiteTurn
                 myChessGame.nextTurn()
