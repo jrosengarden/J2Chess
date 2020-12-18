@@ -99,6 +99,9 @@ class ViewController: UIViewController {
                     return
                 }
                 
+                // display checks if there are any
+                displayCheck()
+                
                 // flip value of isWhiteTurn
                 myChessGame.nextTurn()
                 
@@ -109,6 +112,16 @@ class ViewController: UIViewController {
                 pieceDragged.frame.origin = sourceOrigin
             }
             
+        }
+    }
+    
+    func displayCheck() {
+        let playerChecked = myChessGame.getPlayerChecked()
+        
+        if playerChecked != nil {
+            lblDisplayCheckOUTLET.text = playerChecked! + " is in check!"
+        } else {
+            lblDisplayCheckOUTLET.text = ""
         }
     }
     
