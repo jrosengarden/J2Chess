@@ -89,12 +89,6 @@ class ViewController: UIViewController {
                 
                 // move is valid so move the piece
                 myChessGame.move(piece: pieceDragged, fromIndex: sourceIndex, toIndex: destIndex, toOrigin: destOrigin)
-                
-                // display checks if there are any
-                displayCheck()
-                
-                // show move, in algebraic notation, on screen
-                displayMove(fromSourceSquare: sourceIndex, toDestSquare: destIndex)
 
                 // check if game is over and call displayWinner() if it is
                 if myChessGame.isGameOver() {
@@ -102,17 +96,63 @@ class ViewController: UIViewController {
                     return
                 }
                 
-                // flip value of isWhiteTurn
-                myChessGame.nextTurn()
-                
-                // update screen with which color's turn it is
-                updateTurnOnScreen()
+                if shouldPromotePawn() {
+                    promptForPawnPromotion()
+                } else {
+                    resumeGame()
+                }
             } else {
                 // move isn't valid so return dragged piece to it's origin
                 pieceDragged.frame.origin = sourceOrigin
             }
             
         }
+    }
+    
+    func resumeGame() {
+        
+        // display checks if there are any
+        displayCheck()
+        
+        // show move, in algebraic notation, on screen if human-to-human game
+        if !isAgainstAI {
+            displayMove()
+        }
+        
+        // flip value of isWhiteTurn
+        myChessGame.nextTurn()
+        
+        // update screen with which color's turn it is
+        updateTurnOnScreen()
+        
+        // make AI move, if necessary
+        if isAgainstAI == true && !myChessGame.isWhiteTurn {
+            myChessGame.makeAIMove()
+            if myChessGame.isGameOver() {
+            displayWinner()
+            return
+            }
+            
+            if shouldPromotePawn() {
+                promote(pawn: myChessGame.getPawnToBePromoted()!, into: "Queen")
+            }
+            displayCheck()
+            displayMove()
+            myChessGame.nextTurn()
+            updateTurnOnScreen()
+        }
+    }
+    
+    func promote(pawn pawnToBePromoted: Pawn, into option: String) {
+        
+    }
+    
+    func promptForPawnPromotion() {
+        
+    }
+    
+    func shouldPromotePawn() -> Bool{
+        return(myChessGame.getPawnToBePromoted() != nil)
     }
     
     func displayCheck() {
@@ -176,8 +216,14 @@ class ViewController: UIViewController {
         gestureRecognizer.setTranslation(CGPoint.zero, in: view)
     }
     
-    func displayMove(fromSourceSquare: BoardIndex, toDestSquare: BoardIndex) {
-        self.dispMove.text = myChessGame.calcAlgebraicNotation(piece: pieceDragged, fromIndex: fromSourceSquare, toIndex: toDestSquare)
+    func displayMove() {
+        
+        // convert the sourceOrigin and destOrigin from CGPoint's to
+        // actual ChessBoard (x,y) coordinates
+        let sourceIndex = ChessBoard.indexOf(origin: sourceOrigin)
+        let destIndex = ChessBoard.indexOf(origin: destOrigin)
+        
+        self.dispMove.text = myChessGame.calcAlgebraicNotation(piece: pieceDragged, fromIndex: sourceIndex, toIndex: destIndex)
         // debugging
         if self.dispMove.text != "" {
             print (self.dispMove.text!)
