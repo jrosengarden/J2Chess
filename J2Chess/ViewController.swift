@@ -114,10 +114,8 @@ class ViewController: UIViewController {
         // display checks if there are any
         displayCheck()
         
-        // show move, in algebraic notation, on screen if human-to-human game
-        if !isAgainstAI {
-            displayMove()
-        }
+        // show move, in algebraic notation, on screen
+        displayMove()
         
         // flip value of isWhiteTurn
         myChessGame.nextTurn()
@@ -137,18 +135,53 @@ class ViewController: UIViewController {
                 promote(pawn: myChessGame.getPawnToBePromoted()!, into: "Queen")
             }
             displayCheck()
-            displayMove()
             myChessGame.nextTurn()
             updateTurnOnScreen()
         }
     }
     
-    func promote(pawn pawnToBePromoted: Pawn, into option: String) {
+    func promote(pawn pawnToBePromoted: Pawn, into pieceName: String) {
         
+        let pawnColor = pawnToBePromoted.color
+        let pawnFrame = pawnToBePromoted.frame
+        let pawnIndex = ChessBoard.indexOf(origin: pawnToBePromoted.frame.origin)
+        
+        myChessGame.theChessBoard.remove(piece: pawnToBePromoted)
+        
+        switch pieceName {
+        case "Queen":
+            myChessGame.theChessBoard.board[pawnIndex.row][pawnIndex.col] = Queen(frame: pawnFrame, color: pawnColor, vc: self)
+        case "Knight":
+            myChessGame.theChessBoard.board[pawnIndex.row][pawnIndex.col] = Knight(frame: pawnFrame, color: pawnColor, vc: self)
+        case "Rook":
+            myChessGame.theChessBoard.board[pawnIndex.row][pawnIndex.col] = Rook(frame: pawnFrame, color: pawnColor, vc: self)
+        case "Bishop":
+            myChessGame.theChessBoard.board[pawnIndex.row][pawnIndex.col] = Bishop(frame: pawnFrame, color: pawnColor, vc: self)
+        default:
+            break
+        }
     }
     
     func promptForPawnPromotion() {
-        
+        if let pawnToPromote = myChessGame.getPawnToBePromoted() {
+            
+            let box = UIAlertController(title: "Pawn Promotion", message: "Choose Piece", preferredStyle: UIAlertController.Style.alert)
+            
+            box.addAction(UIAlertAction(title: "Queen", style: UIAlertAction.Style.default, handler: { action in self.promote(pawn: pawnToPromote, into: action.title!)
+                self.resumeGame()
+            }))
+            box.addAction(UIAlertAction(title: "Knight", style: UIAlertAction.Style.default, handler: { action in self.promote(pawn: pawnToPromote, into: action.title!)
+                self.resumeGame()
+            }))
+            box.addAction(UIAlertAction(title: "Bishop", style: UIAlertAction.Style.default, handler: { action in self.promote(pawn: pawnToPromote, into: action.title!)
+                self.resumeGame()
+            }))
+            box.addAction(UIAlertAction(title: "Rook", style: UIAlertAction.Style.default, handler: { action in self.promote(pawn: pawnToPromote, into: action.title!)
+                self.resumeGame()
+            }))
+            
+            self.present(box, animated: true, completion: nil)
+        }
     }
     
     func shouldPromotePawn() -> Bool{
@@ -218,11 +251,27 @@ class ViewController: UIViewController {
     
     func displayMove() {
         
+        // NOTE:  this function is called twice in a human vs human game
+        //        and myChessGame.calcAlgebraicNotation properly constructs
+        //        the first half of the move text (white's move) and the
+        //        second half of the move text (black's move).
+        //
+        //        This function is only being called once in a human vs iPhone game
+        //        It is called after White make's a move only so the call to
+        //        myChessGame.calcAlgebraicNotation only has a chance to construct
+        //        the first half of the move (white's move).  Black's move is updated
+        //        to the display label (dispMove) in myChessGame.makeAIMove once a
+        //        legal move has been figured out and executed.
+        
         // convert the sourceOrigin and destOrigin from CGPoint's to
         // actual ChessBoard (x,y) coordinates
         let sourceIndex = ChessBoard.indexOf(origin: sourceOrigin)
         let destIndex = ChessBoard.indexOf(origin: destOrigin)
         
+        // insure chess notation text is black
+        self.dispMove.textColor =  #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+        
+        // calculate and display chess notation
         self.dispMove.text = myChessGame.calcAlgebraicNotation(piece: pieceDragged, fromIndex: sourceIndex, toIndex: destIndex)
         // debugging
         if self.dispMove.text != "" {

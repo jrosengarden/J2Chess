@@ -29,8 +29,123 @@ class ChessGame: NSObject {
         
     }
     
+    func getArrayOfPossibleMoves(forPiece piece: UIChessPiece) -> [BoardIndex] {
+       
+        var arrayOfMoves: [BoardIndex] = []
+        let source = theChessBoard.getIndex(forChessPiece: piece)!
+        
+        for row in 0..<theChessBoard.ROWS {
+            for col in 0..<theChessBoard.COLS {
+                
+                let dest = BoardIndex(row: row, col: col)
+                
+                if isNormalMoveValid(forPiece: piece, fromIndex: source, toIndex: dest) {
+                    arrayOfMoves.append(dest)
+                }
+            }
+        }
+        
+        return arrayOfMoves
+    }
+    
     func makeAIMove() {
         
+        // get the white king if possible
+        if getPlayerChecked() == "White" {
+            for aChessPiece in theChessBoard.vc.chessPieces {
+                if aChessPiece.color == #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1) {
+                    
+                    guard let source = theChessBoard.getIndex(forChessPiece: aChessPiece) else {
+                        continue
+                    }
+                    
+                    guard let dest = theChessBoard.getIndex(forChessPiece: theChessBoard.whiteKing) else {
+                        continue
+                    }
+                    
+                    if isNormalMoveValid(forPiece: aChessPiece, fromIndex: source, toIndex: dest) {
+                        move(piece: aChessPiece, fromIndex: source, toIndex: dest, toOrigin: theChessBoard.whiteKing.frame.origin)
+                        return
+                    }
+                    
+                }
+            }
+        }
+        
+        // attack undefended white piece, if there is no check on black king
+        if getPlayerChecked() == nil {
+            if didAttackUndefendedPiece() {
+                return
+            }
+        }
+        
+        var moveFound:Bool = false
+        var numberOfTriesToEscapeCheck:Int = 0
+        
+        searchForMoves: while moveFound == false {
+            
+            // get random piece
+            let randChessPiecesArrayIndex = Int(arc4random_uniform(UInt32(theChessBoard.vc.chessPieces.count)))
+            let chessPieceToMove = theChessBoard.vc.chessPieces[randChessPiecesArrayIndex]
+            
+            guard chessPieceToMove.color == #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1) else {
+                continue searchForMoves
+            }
+            
+            // get random move
+            let movesArray = getArrayOfPossibleMoves(forPiece: chessPieceToMove)
+            guard movesArray.isEmpty == false else {
+                continue searchForMoves
+            }
+            
+            let randMovesArrayIndex = Int(arc4random_uniform(UInt32(movesArray.count)))
+            let randDestIndex = movesArray[randMovesArrayIndex]
+            let destOrigin = ChessBoard.getFrame(forRow: randDestIndex.row, forCol: randDestIndex.col).origin
+            
+            guard let sourceIndex = theChessBoard.getIndex(forChessPiece: chessPieceToMove) else {
+                continue searchForMoves
+            }
+            
+            // simulate the move on board matrix
+            let pieceTaken = theChessBoard.board[randDestIndex.row][randDestIndex.col]
+            theChessBoard.board[randDestIndex.row][randDestIndex.col] = theChessBoard.board[sourceIndex.row][sourceIndex.col]
+            theChessBoard.board[sourceIndex.row][sourceIndex.col] = Dummy()
+            
+            if numberOfTriesToEscapeCheck < 1000 {
+                guard getPlayerChecked() != "Black" else {
+                    // undo move
+                    theChessBoard.board[sourceIndex.row][sourceIndex.col] = theChessBoard.board[randDestIndex.row][randDestIndex.col]
+                    theChessBoard.board[randDestIndex.row][randDestIndex.col] = pieceTaken
+                    
+                    numberOfTriesToEscapeCheck += 1
+                    continue searchForMoves
+                }
+            }
+            
+            // undo move
+            theChessBoard.board[sourceIndex.row][sourceIndex.col] = theChessBoard.board[randDestIndex.row][randDestIndex.col]
+            theChessBoard.board[randDestIndex.row][randDestIndex.col] = pieceTaken
+            
+            // try best move if any good one
+            if didBestMoveForAI(forScoreOver: 2) {
+                return
+            }
+            
+            move(piece: chessPieceToMove, fromIndex: sourceIndex, toIndex: randDestIndex, toOrigin: destOrigin)
+            
+            // AI made the move for Black so update the dispMove label with Black's move
+            theChessBoard.vc.dispMove.text = calcAlgebraicNotation(piece: chessPieceToMove, fromIndex: sourceIndex, toIndex: randDestIndex)
+            
+            moveFound = true
+        }
+    }
+    
+    func didBestMoveForAI(forScoreOver limit: Int) -> Bool {
+        return false
+    }
+    
+    func didAttackUndefendedPiece() ->Bool {
+        return false
     }
     
     func getPawnToBePromoted() -> Pawn? {
@@ -146,19 +261,29 @@ class ChessGame: NSObject {
     //                                  2) trying to attack one of it's own pieces
     func isNormalMoveValid(forPiece piece: UIChessPiece, fromIndex source: BoardIndex, toIndex dest: BoardIndex) -> Bool {
         
+
+        // suppress the message if the AI is making moves since it tests many possibilities
+        // that generate the messages
         guard source != dest else {
-            theChessBoard.vc.dispMove.text = "MOVING PIECE ON ITS OWN POSITION"
+            if isWhiteTurn || !theChessBoard.vc.isAgainstAI {
+                theChessBoard.vc.dispMove.text = "MOVING PIECE ON ITS OWN POSITION"
+            }
             theChessBoard.vc.dispMove.textColor = isWhiteTurn ? #colorLiteral(red: 0.9999960065, green: 1, blue: 1, alpha: 1) : #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
             print (theChessBoard.vc.dispMove.text!)
             return false
         }
  
+        // suppress the message if the AI is making moves since it tests many possibilities
+        // that generate the messages
         guard !isAttackingAlliedPiece(sourceChessPiece: piece, destIndex: dest) else {
+            if isWhiteTurn || !theChessBoard.vc.isAgainstAI {
                 theChessBoard.vc.dispMove.text = "ATTACKING YOUR OWN PIECE"
+            }
                 theChessBoard.vc.dispMove.textColor = isWhiteTurn ? #colorLiteral(red: 0.9999960065, green: 1, blue: 1, alpha: 1) : #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
                 print(theChessBoard.vc.dispMove.text!)
                 return false
                 }
+
         
         switch piece {
         case is Pawn:
