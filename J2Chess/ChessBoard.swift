@@ -13,8 +13,14 @@ class ChessBoard: NSObject {
     var vc: ViewController!
     let ROWS = 8
     let COLS = 8
+    
+    // easier to deal with the following pieces, in code, as specific variables
     var whiteKing: King!
     var blackKing: King!
+    var whiteQueenRook: Rook!
+    var whiteKingRook: Rook!
+    var blackQueenRook: Rook!
+    var blackKingRook: Rook!
     
     func getIndex(forChessPiece chessPieceToFind: UIChessPiece) -> BoardIndex? {
         for row in 0..<ROWS {
@@ -88,7 +94,8 @@ class ChessBoard: NSObject {
                 case 0:
                     switch col {
                     case 0:
-                        board[row][col] = Rook(frame: ChessBoard.getFrame(forRow: row, forCol: col), color:#colorLiteral(red: 0, green: 0, blue: 0, alpha: 1), vc: vc)
+                        blackQueenRook = Rook(frame: ChessBoard.getFrame(forRow: row, forCol: col), color:#colorLiteral(red: 0, green: 0, blue: 0, alpha: 1), vc: vc)
+                        board[row][col] = blackQueenRook
                     case 1:
                         board[row][col] = Knight(frame: ChessBoard.getFrame(forRow: row, forCol: col), color:#colorLiteral(red: 0, green: 0, blue: 0, alpha: 1), vc: vc)
                     case 2:
@@ -103,7 +110,8 @@ class ChessBoard: NSObject {
                     case 6:
                         board[row][col] = Knight(frame: ChessBoard.getFrame(forRow: row, forCol: col), color:#colorLiteral(red: 0, green: 0, blue: 0, alpha: 1), vc: vc)
                     default:
-                        board[row][col] = Rook(frame: ChessBoard.getFrame(forRow: row, forCol: col), color:#colorLiteral(red: 0, green: 0, blue: 0, alpha: 1), vc: vc)
+                        blackKingRook = Rook(frame: ChessBoard.getFrame(forRow: row, forCol: col), color:#colorLiteral(red: 0, green: 0, blue: 0, alpha: 1), vc: vc)
+                        board[row][col] = blackKingRook
                     }
                 case 1:
                     board[row][col] = Pawn(frame: ChessBoard.getFrame(forRow: row, forCol: col), color:#colorLiteral(red: 0, green: 0, blue: 0, alpha: 1), vc: vc)
@@ -112,7 +120,8 @@ class ChessBoard: NSObject {
                 case 7:
                     switch col {
                     case 0:
-                        board[row][col] = Rook(frame: ChessBoard.getFrame(forRow: row, forCol: col), color:#colorLiteral(red: 0.9999960065, green: 1, blue: 1, alpha: 1), vc: vc)
+                        whiteQueenRook = Rook(frame: ChessBoard.getFrame(forRow: row, forCol: col), color:#colorLiteral(red: 0.9999960065, green: 1, blue: 1, alpha: 1), vc: vc)
+                        board[row][col] = whiteQueenRook
                     case 1:
                         board[row][col] = Knight(frame: ChessBoard.getFrame(forRow: row, forCol: col), color:#colorLiteral(red: 0.9999960065, green: 1, blue: 1, alpha: 1), vc: vc)
                     case 2:
@@ -127,7 +136,8 @@ class ChessBoard: NSObject {
                     case 6:
                         board[row][col] = Knight(frame: ChessBoard.getFrame(forRow: row, forCol: col), color:#colorLiteral(red: 0.9999960065, green: 1, blue: 1, alpha: 1), vc: vc)
                     default:
-                        board[row][col] = Rook(frame: ChessBoard.getFrame(forRow: row, forCol: col), color:#colorLiteral(red: 0.9999960065, green: 1, blue: 1, alpha: 1), vc: vc)
+                        whiteKingRook = Rook(frame: ChessBoard.getFrame(forRow: row, forCol: col), color:#colorLiteral(red: 0.9999960065, green: 1, blue: 1, alpha: 1), vc: vc)
+                        board[row][col] = whiteKingRook
                     }
                 default:
                     board[row][col] = Dummy(frame: ChessBoard.getFrame(forRow: row, forCol: col))

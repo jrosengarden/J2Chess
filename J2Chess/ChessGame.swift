@@ -16,6 +16,8 @@ class ChessGame: NSObject {
     var moveCount:Int?                          // track move count for move display
     var firstHalfMove:String?                   // save current move until opponent moves
     var pieceToRemove:Piece?                    // global variable for piece (if any) at dest square
+    
+    var castleNotation:String = ""              // global variable to hold castling notation
 
     
     init(viewController: ViewController) {
@@ -405,16 +407,124 @@ class ChessGame: NSObject {
             nextCol += increaseCol
         }
         
+        // if the piece is a Rook and the code gets here then the Rook has moved
+        switch (piece) {
+        case is Rook:
+            (piece as! Rook).didMove = true
+        default:
+            break
+        }
+        
+        return true
+    }
+    
+    // check to insure squares king is passing over on the castle move are clear (Dummy)
+    func castlePathIsClear(fromIndex source: BoardIndex, toIndex dest: BoardIndex) -> Bool {
+        
+        var increaseCol:Int = 0
+        
+        if dest.col > source.col {
+            increaseCol = 1
+        } else {
+            increaseCol = -1
+        }
+        
+        var nextCol:Int = source.col + increaseCol
+        
+        // check each square being passed over
+        // if any square contains a chess piece then we're done
+        // and the move will fail
+        while nextCol != dest.col {
+            if !(theChessBoard.board[source.row][nextCol] is Dummy) {
+                return false
+            }
+            nextCol += increaseCol
+        }
         
         
         return true
     }
     
     func isMoveValid(forKing king: King, fromIndex source: BoardIndex, toIndex dest: BoardIndex) -> Bool {
+        
+        var retVal:Bool = false
     
         // basic check of legal king movement (no consideration of board state)
         if !(king.doesMoveSeemFine(fromIndex: source, toIndex: dest)) {
-            return false
+            // check for castling move (with full reference to board state) & execute if possible
+            switch king == theChessBoard.whiteKing {
+            case true:  // white king attempting to castle
+                if source.row == 7 && dest.row == 7 && abs(source.col - dest.col) == 2 && king.didMove == false {
+                    if dest.col == 2 {
+                        if theChessBoard.whiteQueenRook.didMove == false {
+                            if !castlePathIsClear(fromIndex: source, toIndex: dest) {
+                                return false    // bail out immediately if path isn't clear
+                            }
+                            print ("castling to white queen side rook")
+                            // need to move white queen rook from row = 7,col = 0 to row = 7,col = 3
+                            let rookDestOrigin = ChessBoard.getFrame(forRow: 7, forCol: 3).origin
+                            let rookSourceIndex = theChessBoard.getIndex(forChessPiece: theChessBoard.whiteQueenRook)!
+                            let rookDestIndex = BoardIndex(row: 7, col: 3)
+                            move(piece: theChessBoard.whiteQueenRook, fromIndex: rookSourceIndex, toIndex: rookDestIndex, toOrigin: rookDestOrigin)
+                            self.castleNotation = "0-0-0"
+                            retVal = true
+                        }
+                    }
+                    if dest.col == 6 {
+                        if theChessBoard.whiteKingRook.didMove == false {
+                            if !castlePathIsClear(fromIndex: source, toIndex: dest) {
+                                return false    // bail out immediately if path isn't clear
+                            }
+                            print ("castling to white king side rook")
+                            // need to move white king rook from row = 7,col = 7 to row = 7,col = 5
+                            let rookDestOrigin = ChessBoard.getFrame(forRow: 7, forCol: 5).origin
+                            let rookSourceIndex = theChessBoard.getIndex(forChessPiece: theChessBoard.whiteKingRook)!
+                            let rookDestIndex = BoardIndex(row: 7, col: 5)
+                            move(piece: theChessBoard.whiteKingRook, fromIndex: rookSourceIndex, toIndex: rookDestIndex, toOrigin: rookDestOrigin)
+                            self.castleNotation = "0-0"
+                            retVal = true
+                        }
+                    }
+                }
+                break
+            default:    // black king attempting to castle
+                if source.row == 0 && dest.row == 0 && abs(source.col - dest.col) == 2 && king.didMove == false {
+                    if dest.col == 2 {
+                        if theChessBoard.blackQueenRook.didMove == false {
+                            if !castlePathIsClear(fromIndex: source, toIndex: dest) {
+                                return false    // bail out immediately if path isn't clear
+                            }
+                            print ("castling to black queen side rook")
+                            // need to move black queen rook from row = 0,col = 0 to row = 0,col = 3
+                            let rookDestOrigin = ChessBoard.getFrame(forRow: 0, forCol: 3).origin
+                            let rookSourceIndex = theChessBoard.getIndex(forChessPiece: theChessBoard.blackQueenRook)!
+                            let rookDestIndex = BoardIndex(row: 0, col: 3)
+                            move(piece: theChessBoard.blackQueenRook, fromIndex: rookSourceIndex, toIndex: rookDestIndex, toOrigin: rookDestOrigin)
+                            self.castleNotation = "0-0-0"
+                            retVal = true
+                        }
+                    }
+                    if dest.col == 6 {
+                        if theChessBoard.blackKingRook.didMove == false {
+                            if !castlePathIsClear(fromIndex: source, toIndex: dest) {
+                                return false    // bail out immediately if path isn't clear
+                            }
+                            print ("castling to black king side rook")
+                            // need to move black king side rook from row = 0,col=7 to row = 0,col = 5
+                            let rookDestOrigin = ChessBoard.getFrame(forRow: 0, forCol: 5).origin
+                            let rookSourceIndex = theChessBoard.getIndex(forChessPiece: theChessBoard.blackKingRook)!
+                            let rookDestIndex = BoardIndex(row: 0, col: 5)
+                            move(piece: theChessBoard.blackKingRook, fromIndex: rookSourceIndex, toIndex: rookDestIndex, toOrigin: rookDestOrigin)
+                            self.castleNotation = "0-0"
+                            retVal = true
+                        }
+                    }
+                }
+                break
+            }
+            // end of check for castling move
+            
+            return retVal
         }
         
         // advanced check of legal king movement with full consideration of board state
@@ -422,6 +532,8 @@ class ChessGame: NSObject {
             return false
         }
         
+        // if the code gets here then the King has moved
+        king.didMove = true
         return true
     }
     
@@ -664,21 +776,31 @@ class ChessGame: NSObject {
         // if it was white's turn then save the move to firstHalfMove
         // and return nothing to the calling function
         if !(isWhiteTurn) {
-            // generate text string in algebraic notation to return
             moveText = firstHalfMove!
-            moveText! += " \(thisPiece ?? "")"
-            moveText! += captureMade ? "x" : ""
-            moveText! += "\(algebraicDestPosition ?? "")"
-            if theChessBoard.vc.lblDisplayCheckOUTLET.text == "White is in check!" {
-                moveText! += "+"
+            if self.castleNotation == "" {
+                // generate text string in algebraic notation to return
+                moveText! += " \(thisPiece ?? "")"
+                moveText! += captureMade ? "x" : ""
+                moveText! += "\(algebraicDestPosition ?? "")"
+                if theChessBoard.vc.lblDisplayCheckOUTLET.text == "White is in check!" {
+                    moveText! += "+"
+                }
+            } else {
+                moveText! += " " + self.castleNotation
+                self.castleNotation = ""
             }
         } else {
-            firstHalfMove! = "\(moveCount ?? 0): \(thisPiece ?? "")"
-            firstHalfMove! += captureMade ? "x" : ""
-            //firstHalfMove! += "\(algebraicSourcePosition ?? "")"
-            firstHalfMove! += "\(algebraicDestPosition ?? "")"
-            if theChessBoard.vc.lblDisplayCheckOUTLET.text == "Black is in check!" {
-                firstHalfMove! += "+"
+            if self.castleNotation == "" {
+                firstHalfMove! = "\(moveCount ?? 0): \(thisPiece ?? "")"
+                firstHalfMove! += captureMade ? "x" : ""
+                //firstHalfMove! += "\(algebraicSourcePosition ?? "")"
+                firstHalfMove! += "\(algebraicDestPosition ?? "")"
+                if theChessBoard.vc.lblDisplayCheckOUTLET.text == "Black is in check!" {
+                    firstHalfMove! += "+"
+                }
+            } else {
+                firstHalfMove! = self.castleNotation + " "
+                self.castleNotation = ""
             }
         }
         

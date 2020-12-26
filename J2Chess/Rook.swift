@@ -9,6 +9,8 @@ import UIKit
 
 class Rook: UIChessPiece {
     
+    var didMove:Bool = false        // track if Rook has moved (for castling)
+    
     init(frame:CGRect, color: UIColor, vc: ViewController) {
         super.init(frame: frame)
         
