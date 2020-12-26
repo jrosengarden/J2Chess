@@ -447,13 +447,18 @@ class ChessGame: NSObject {
     
     func isMoveValid(forKing king: King, fromIndex source: BoardIndex, toIndex dest: BoardIndex) -> Bool {
         
+        // set the default return value of this function to false
         var retVal:Bool = false
     
         // basic check of legal king movement (no consideration of board state)
         if !(king.doesMoveSeemFine(fromIndex: source, toIndex: dest)) {
-            // check for castling move (with full reference to board state) & execute if possible
+            
+            // falling in here means the king.doesMoveSeemFine returned false
+            // before letting this function return false lets check to see if it
+            // was possibly a castling move (which would have failed the basic doesMoveSeemFine() function
+            // if it is a castling move then deal with it, update the board, and update the move display
             switch king == theChessBoard.whiteKing {
-            case true:  // white king attempting to castle
+            case true:  // is white king attempting to castle?
                 if source.row == 7 && dest.row == 7 && abs(source.col - dest.col) == 2 && king.didMove == false {
                     if dest.col == 2 {
                         if theChessBoard.whiteQueenRook.didMove == false {
@@ -487,7 +492,7 @@ class ChessGame: NSObject {
                     }
                 }
                 break
-            default:    // black king attempting to castle
+            default:    // is black king attempting to castle?
                 if source.row == 0 && dest.row == 0 && abs(source.col - dest.col) == 2 && king.didMove == false {
                     if dest.col == 2 {
                         if theChessBoard.blackQueenRook.didMove == false {

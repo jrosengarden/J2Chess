@@ -51,6 +51,7 @@
 		881BD1B425657FCB00E6B393 /* BoardIndex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardIndex.swift; sourceTree = "<group>"; };
 		881BD1B725657FDA00E6B393 /* ExtensionUIChessPiece.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionUIChessPiece.swift; sourceTree = "<group>"; };
 		881BD1BA2565800700E6B393 /* StartScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartScreen.swift; sourceTree = "<group>"; };
+		884F67952597E82400D8A286 /* J2Chess.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = J2Chess.entitlements; sourceTree = "<group>"; };
 		88B755B525854BE9007AF58F /* NavController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -84,6 +85,7 @@
 		881BD17C25657EC000E6B393 /* J2Chess */ = {
 			isa = PBXGroup;
 			children = (
+				884F67952597E82400D8A286 /* J2Chess.entitlements */,
 				881BD19625657F5E00E6B393 /* Piece.swift */,
 				881BD19925657F7000E6B393 /* Pawn.swift */,
 				881BD19C25657F7B00E6B393 /* Knight.swift */,
@@ -342,6 +344,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = J2Chess/J2Chess.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = 8KW4KF38JB;
@@ -353,6 +356,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.rosengarden.J2Chess;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -363,6 +367,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = J2Chess/J2Chess.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = 8KW4KF38JB;
@@ -374,6 +379,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.rosengarden.J2Chess;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
