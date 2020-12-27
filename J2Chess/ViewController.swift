@@ -13,6 +13,11 @@ class ViewController: UIViewController {
     @IBOutlet weak var lblDisplayCheckOUTLET: UILabel!
     @IBOutlet var panOUTLET: UIPanGestureRecognizer!
     @IBOutlet weak var dispMove: UILabel!
+    @IBOutlet weak var txtGameMoves: UITextView!
+    
+    
+
+    
     
     var pieceDragged: UIChessPiece!
     var sourceOrigin: CGPoint!
@@ -33,10 +38,28 @@ class ViewController: UIViewController {
         // Do any additional setup after loading the view.
         chessPieces = []
         myChessGame = ChessGame.init(viewController: self)
+        
+        // textfield set to hidden on startup but...just to be sure!
+        txtGameMoves.isHidden = true
+
+    }
+    
+    @IBAction func showGameMoves(_ sender: Any) {
+        
+        if txtGameMoves.isHidden {
+            txtGameMoves.isHidden = false
+            txtGameMoves.text = myChessGame.gameMoves.joined(separator: "\n")
+        } else {
+            txtGameMoves.isHidden = true
+        }
+        
     }
     
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        
+        // the minute a piece starts moving insure the txtGameMoves field gets hidden
+        txtGameMoves.isHidden = true
         
         pieceDragged = touches.first!.view as? UIChessPiece
         

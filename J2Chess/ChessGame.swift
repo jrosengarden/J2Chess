@@ -18,6 +18,7 @@ class ChessGame: NSObject {
     var pieceToRemove:Piece?                    // global variable for piece (if any) at dest square
     
     var castleNotation:String = ""              // global variable to hold castling notation
+    var gameMoves:[String] = []                 // global variable to retain all game moves
 
     
     init(viewController: ViewController) {
@@ -789,6 +790,7 @@ class ChessGame: NSObject {
                 moveText! += " " + self.castleNotation
                 self.castleNotation = ""
             }
+            gameMoves.append(moveText!)
         } else {
             if self.castleNotation == "" {
                 firstHalfMove! = "\(moveCount ?? 0): \(thisPiece ?? "")"
@@ -799,7 +801,7 @@ class ChessGame: NSObject {
                     firstHalfMove! += "+"
                 }
             } else {
-                firstHalfMove! = self.castleNotation + " "
+                firstHalfMove! = "\(moveCount ?? 0): " + self.castleNotation + " "
                 self.castleNotation = ""
             }
         }
