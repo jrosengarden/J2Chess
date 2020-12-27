@@ -445,6 +445,17 @@ class ChessGame: NSObject {
         return true
     }
     
+    // function to move the rook in a castling move after all checks for legality have been cleared
+    func castle(toRow:Int, toCol:Int, theRook:Rook, notation:String) {
+    
+        let rookDestOrigin = ChessBoard.getFrame(forRow: toRow, forCol: toCol).origin
+        let rookSourceIndex = theChessBoard.getIndex(forChessPiece: theRook)!
+        let rookDestIndex = BoardIndex(row: toRow, col: toCol)
+        move(piece: theRook, fromIndex: rookSourceIndex, toIndex: rookDestIndex, toOrigin: rookDestOrigin)
+        self.castleNotation = notation
+        
+    }
+    
     func isMoveValid(forKing king: King, fromIndex source: BoardIndex, toIndex dest: BoardIndex) -> Bool {
         
         // set the default return value of this function to false
@@ -467,11 +478,7 @@ class ChessGame: NSObject {
                             }
                             print ("castling to white queen side rook")
                             // need to move white queen rook from row = 7,col = 0 to row = 7,col = 3
-                            let rookDestOrigin = ChessBoard.getFrame(forRow: 7, forCol: 3).origin
-                            let rookSourceIndex = theChessBoard.getIndex(forChessPiece: theChessBoard.whiteQueenRook)!
-                            let rookDestIndex = BoardIndex(row: 7, col: 3)
-                            move(piece: theChessBoard.whiteQueenRook, fromIndex: rookSourceIndex, toIndex: rookDestIndex, toOrigin: rookDestOrigin)
-                            self.castleNotation = "0-0-0"
+                            castle(toRow: 7, toCol: 3, theRook: theChessBoard.whiteQueenRook, notation: "0-0-0")
                             retVal = true
                         }
                     }
@@ -482,11 +489,7 @@ class ChessGame: NSObject {
                             }
                             print ("castling to white king side rook")
                             // need to move white king rook from row = 7,col = 7 to row = 7,col = 5
-                            let rookDestOrigin = ChessBoard.getFrame(forRow: 7, forCol: 5).origin
-                            let rookSourceIndex = theChessBoard.getIndex(forChessPiece: theChessBoard.whiteKingRook)!
-                            let rookDestIndex = BoardIndex(row: 7, col: 5)
-                            move(piece: theChessBoard.whiteKingRook, fromIndex: rookSourceIndex, toIndex: rookDestIndex, toOrigin: rookDestOrigin)
-                            self.castleNotation = "0-0"
+                            castle(toRow: 7, toCol: 5, theRook: theChessBoard.whiteKingRook, notation: "0-0")
                             retVal = true
                         }
                     }
@@ -501,11 +504,7 @@ class ChessGame: NSObject {
                             }
                             print ("castling to black queen side rook")
                             // need to move black queen rook from row = 0,col = 0 to row = 0,col = 3
-                            let rookDestOrigin = ChessBoard.getFrame(forRow: 0, forCol: 3).origin
-                            let rookSourceIndex = theChessBoard.getIndex(forChessPiece: theChessBoard.blackQueenRook)!
-                            let rookDestIndex = BoardIndex(row: 0, col: 3)
-                            move(piece: theChessBoard.blackQueenRook, fromIndex: rookSourceIndex, toIndex: rookDestIndex, toOrigin: rookDestOrigin)
-                            self.castleNotation = "0-0-0"
+                            castle(toRow: 0, toCol: 3, theRook: theChessBoard.blackQueenRook, notation: "0-0-0")
                             retVal = true
                         }
                     }
@@ -516,11 +515,7 @@ class ChessGame: NSObject {
                             }
                             print ("castling to black king side rook")
                             // need to move black king side rook from row = 0,col=7 to row = 0,col = 5
-                            let rookDestOrigin = ChessBoard.getFrame(forRow: 0, forCol: 5).origin
-                            let rookSourceIndex = theChessBoard.getIndex(forChessPiece: theChessBoard.blackKingRook)!
-                            let rookDestIndex = BoardIndex(row: 0, col: 5)
-                            move(piece: theChessBoard.blackKingRook, fromIndex: rookSourceIndex, toIndex: rookDestIndex, toOrigin: rookDestOrigin)
-                            self.castleNotation = "0-0"
+                            castle(toRow: 0, toCol: 5, theRook: theChessBoard.blackKingRook, notation: "0-0")
                             retVal = true
                         }
                     }
