@@ -423,26 +423,6 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <textView hidden="YES" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" editable="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="R8Y-iO-cWH">
-                                <rect key="frame" x="132" y="46" width="133" height="56"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="0.8196263909" green="0.81938439610000002" blue="0.83919155599999995" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                <mutableString key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</mutableString>
-                                <color key="textColor" red="0.27684843539999998" green="0.64198678730000003" blue="0.72542411090000003" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                            </textView>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Yjm-R3-jbk">
-                                <rect key="frame" x="28" y="44" width="99" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                <state key="normal" title="Review Game">
-                                    <color key="titleColor" red="0.27684843539999998" green="0.64198678730000003" blue="0.72542411090000003" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                </state>
-                                <connections>
-                                    <action selector="showGameMoves:" destination="BYZ-38-t0r" eventType="touchUpInside" id="yeG-8Z-xke"/>
-                                </connections>
-                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemGray4Color"/>
@@ -451,13 +431,18 @@
                             <outletCollection property="gestureRecognizers" destination="81f-Qh-FuE" appends="YES" id="wOD-pg-4qh"/>
                         </connections>
                     </view>
-                    <navigationItem key="navigationItem" id="iSv-fK-ik7"/>
+                    <navigationItem key="navigationItem" id="iSv-fK-ik7">
+                        <barButtonItem key="rightBarButtonItem" title="Title Replaced In Code" id="EPL-9K-C7I">
+                            <connections>
+                                <segue destination="V3C-TX-qPd" kind="show" id="jZf-zI-Zv8"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="dispMove" destination="mqj-ry-SHM" id="Ev7-uS-a7x"/>
                         <outlet property="lblDisplayCheckOUTLET" destination="Qf9-k1-1t5" id="WRL-7d-GRT"/>
                         <outlet property="lblDisplayTurnOUTLET" destination="OJ1-5c-GnJ" id="Bue-QN-UxT"/>
                         <outlet property="panOUTLET" destination="81f-Qh-FuE" id="Wlg-GV-cjg"/>
-                        <outlet property="txtGameMoves" destination="R8Y-iO-cWH" id="nDk-28-9jH"/>
                         <segue destination="tVe-uJ-FrU" kind="unwind" identifier="backToMainMenu" unwindAction="unwindWithSeque:" id="v66-vf-EQ8"/>
                     </connections>
                 </viewController>
@@ -466,6 +451,43 @@
                 <panGestureRecognizer minimumNumberOfTouches="1" id="81f-Qh-FuE"/>
             </objects>
             <point key="canvasLocation" x="615.20000000000005" y="123.68815592203899"/>
+        </scene>
+        <!--Notation View Controller-->
+        <scene sceneID="8eh-DW-L91">
+            <objects>
+                <viewController id="V3C-TX-qPd" customClass="NotationViewController" customModule="J2Chess" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="R0r-vC-39E">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="YOs-Dt-rgr">
+                                <rect key="frame" x="16" y="85" width="343" height="562"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.8196263909" green="0.81938439610000002" blue="0.83919155599999995" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
+                                <color key="textColor" red="0.38703942299999999" green="0.63422387840000005" blue="0.71366107459999995" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="20"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Game Moves" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1gr-rv-MfF">
+                                <rect key="frame" x="111" y="44" width="153" height="33"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="25"/>
+                                <color key="textColor" red="0.38703942299999999" green="0.63422387840000005" blue="0.71366107459999995" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="fCL-vD-wxt"/>
+                        <color key="backgroundColor" red="0.8196263909" green="0.81938439610000002" blue="0.83919155599999995" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="WJ2-5U-fRe"/>
+                    <connections>
+                        <outlet property="txtGameMoves" destination="YOs-Dt-rgr" id="5ks-hk-IJN"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="nDk-sd-9zI" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1351.2" y="137.18140929535232"/>
         </scene>
         <!--Nav Controller-->
         <scene sceneID="WGK-fG-hSJ">

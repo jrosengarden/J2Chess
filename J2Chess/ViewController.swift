@@ -13,7 +13,6 @@ class ViewController: UIViewController {
     @IBOutlet weak var lblDisplayCheckOUTLET: UILabel!
     @IBOutlet var panOUTLET: UIPanGestureRecognizer!
     @IBOutlet weak var dispMove: UILabel!
-    @IBOutlet weak var txtGameMoves: UITextView!
     
     
 
@@ -39,27 +38,12 @@ class ViewController: UIViewController {
         chessPieces = []
         myChessGame = ChessGame.init(viewController: self)
         
-        // textfield set to hidden on startup but...just to be sure!
-        txtGameMoves.isHidden = true
+        self.navigationItem.rightBarButtonItem?.title = "Review Game" + " >"
 
-    }
-    
-    @IBAction func showGameMoves(_ sender: Any) {
-        
-        if txtGameMoves.isHidden {
-            txtGameMoves.isHidden = false
-            txtGameMoves.text = myChessGame.gameMoves.joined(separator: "\n")
-        } else {
-            txtGameMoves.isHidden = true
-        }
-        
     }
     
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        
-        // the minute a piece starts moving insure the txtGameMoves field gets hidden
-        txtGameMoves.isHidden = true
         
         pieceDragged = touches.first!.view as? UIChessPiece
         
@@ -303,7 +287,17 @@ class ViewController: UIViewController {
 
 
     }
-
+    
+    // set hndParent to this viewcontroller (self) if moving to NotationViewController
+    // this will allow NotationViewController to update it's textfield (txtGameMoves) with
+    // the gameMoves[] array from ChessGame.swift
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        if let hndNotationViewController = segue.destination as? NotationViewController {
+            hndNotationViewController.hndParent = self
+        }
+        
+    }
 
 }
 

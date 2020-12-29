@@ -27,6 +27,7 @@
 		881BD1B825657FDA00E6B393 /* ExtensionUIChessPiece.swift in Sources */ = {isa = PBXBuildFile; fileRef = 881BD1B725657FDA00E6B393 /* ExtensionUIChessPiece.swift */; };
 		881BD1BB2565800700E6B393 /* StartScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 881BD1BA2565800700E6B393 /* StartScreen.swift */; };
 		88B755B625854BE9007AF58F /* NavController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88B755B525854BE9007AF58F /* NavController.swift */; };
+		88FBA9A0259B96BC00D1A941 /* NotationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88FBA99F259B96BC00D1A941 /* NotationViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -53,6 +54,7 @@
 		881BD1BA2565800700E6B393 /* StartScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartScreen.swift; sourceTree = "<group>"; };
 		884F67952597E82400D8A286 /* J2Chess.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = J2Chess.entitlements; sourceTree = "<group>"; };
 		88B755B525854BE9007AF58F /* NavController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavController.swift; sourceTree = "<group>"; };
+		88FBA99F259B96BC00D1A941 /* NotationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotationViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -104,6 +106,7 @@
 				881BD17F25657EC000E6B393 /* SceneDelegate.swift */,
 				881BD18125657EC000E6B393 /* ViewController.swift */,
 				881BD18325657EC000E6B393 /* Main.storyboard */,
+				88FBA99F259B96BC00D1A941 /* NotationViewController.swift */,
 				881BD18625657EC100E6B393 /* Assets.xcassets */,
 				881BD18825657EC100E6B393 /* LaunchScreen.storyboard */,
 				881BD18B25657EC100E6B393 /* Info.plist */,
@@ -189,6 +192,7 @@
 				881BD1B825657FDA00E6B393 /* ExtensionUIChessPiece.swift in Sources */,
 				881BD18225657EC000E6B393 /* ViewController.swift in Sources */,
 				881BD17E25657EC000E6B393 /* AppDelegate.swift in Sources */,
+				88FBA9A0259B96BC00D1A941 /* NotationViewController.swift in Sources */,
 				881BD1AF25657FB900E6B393 /* ChessGame.swift in Sources */,
 				88B755B625854BE9007AF58F /* NavController.swift in Sources */,
 				881BD1A325657F9200E6B393 /* Bishop.swift in Sources */,

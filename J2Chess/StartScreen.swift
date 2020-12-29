@@ -20,7 +20,7 @@ class StartScreen: UIViewController {
         self.navigationController?.navigationBar.layoutIfNeeded()
         
         // set navBar title
-        self.navigationItem.title = "End game and return to main menu"
+        self.navigationItem.title = "End game"
        
         // hide navbar on initial screen
         self.navigationItem.titleView = UIView()
