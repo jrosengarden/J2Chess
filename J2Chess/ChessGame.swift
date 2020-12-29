@@ -804,6 +804,10 @@ class ChessGame: NSObject {
                 firstHalfMove! = "\(moveCount ?? 0): " + self.castleNotation + " "
                 self.castleNotation = ""
             }
+            while firstHalfMove!.count < 10 {
+                firstHalfMove! += " "
+            }
+
         }
         
         return !(isWhiteTurn) ? moveText! : ""
