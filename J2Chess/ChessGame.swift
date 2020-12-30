@@ -465,6 +465,13 @@ class ChessGame: NSObject {
         // basic check of legal king movement (no consideration of board state)
         if !(king.doesMoveSeemFine(fromIndex: source, toIndex: dest)) {
             
+            // if king is in check then immediately bail
+            // no point in checking for castling since castling
+            // while in check is illegal
+            if king.isInCheck {
+                return retVal
+            }
+            
             // falling in here means the king.doesMoveSeemFine returned false
             // before letting this function return false lets check to see if it
             // was possibly a castling move (which would have failed the basic doesMoveSeemFine() function
