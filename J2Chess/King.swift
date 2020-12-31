@@ -10,7 +10,6 @@ import UIKit
 class King: UIChessPiece {
     
     var didMove:Bool = false        // track if King has moved (for castling)
-    var isInCheck:Bool = false      // set if King is in check
     
     init(frame:CGRect, color: UIColor, vc: ViewController) {
         super.init(frame: frame)

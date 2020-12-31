@@ -200,17 +200,8 @@ class ViewController: UIViewController {
         
         if playerChecked != nil {
             lblDisplayCheckOUTLET.text = playerChecked! + " is in check!"
-            if playerChecked == "White" {
-                myChessGame.theChessBoard.whiteKing.isInCheck = true
-                myChessGame.theChessBoard.blackKing.isInCheck = false
-            } else {
-                myChessGame.theChessBoard.blackKing.isInCheck = true
-                myChessGame.theChessBoard.whiteKing.isInCheck = false
-            }
         } else {
             lblDisplayCheckOUTLET.text = ""
-            myChessGame.theChessBoard.whiteKing.isInCheck = false
-            myChessGame.theChessBoard.blackKing.isInCheck = false
         }
     }
     
