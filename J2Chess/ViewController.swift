@@ -58,6 +58,18 @@ class ViewController: UIViewController {
         }
     }
     
+    // for some reason touchesCancelled(..) is sometimes being called instead of touchesEnded(..)
+    // this was causing the chess piece to be dropped in some random position that screwed up
+    // the chesspiece array, the board and the game.  By implementing this function when a
+    // spurious call to touchesCancelled is made the chess piece will simply be put back on it's
+    // original square.  The user will then be able to move the piece properly.
+    // It seems that iOS is making some decision on how much of a movement is significant
+    // and how much is insignificant and should result in a call to touchesCancelled(..)
+    // NOTE:  It seems to be a function of possibly moving the finger too fast???
+    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+        pieceDragged.frame.origin = sourceOrigin
+    }
+    
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
       
         if pieceDragged != nil {

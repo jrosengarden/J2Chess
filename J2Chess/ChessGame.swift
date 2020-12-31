@@ -457,8 +457,7 @@ class ChessGame: NSObject {
         
     }
     
-    // TODO: build castlingFromThruIntoCheck function
-    func isCastlingFromThruIntoCheck(forRook rook: Rook) -> Bool {
+    func isCastlingFromThruIntoCheck(forKing: King, forRook rook: Rook) -> Bool {
         
         // default value - assume king is not castling from/thru/into check
         var retVal: Bool = false
@@ -466,31 +465,33 @@ class ChessGame: NSObject {
         var checkingPiecesOfColor: UIColor?         // color of pieces to see if they are checking
                                                     // any of the squares king is moving from-to
         
+        if forKing == theChessBoard.whiteKing {
+            checkingPiecesOfColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+        } else {
+            checkingPiecesOfColor = #colorLiteral(red: 0.9999960065, green: 1, blue: 1, alpha: 1)
+        }
+        
         // setup the array of boardIndexToCheck[] based on which rook the king is castling to
         switch rook {
         case theChessBoard.whiteQueenRook:      // white queen side castle 0-0-0
             boardIndexToCheck.append(BoardIndex(row: 7, col: 4))
             boardIndexToCheck.append(BoardIndex(row: 7, col: 3))
             boardIndexToCheck.append(BoardIndex(row: 7, col: 2))
-            checkingPiecesOfColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
             break
         case theChessBoard.whiteKingRook:       // white king side castle 0-0
             boardIndexToCheck.append(BoardIndex(row: 7, col: 4))
             boardIndexToCheck.append(BoardIndex(row: 7, col: 5))
             boardIndexToCheck.append(BoardIndex(row: 7, col: 6))
-            checkingPiecesOfColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
             break
         case theChessBoard.blackQueenRook:      // black queen side castle 0-0-0
             boardIndexToCheck.append(BoardIndex(row: 0, col: 4))
             boardIndexToCheck.append(BoardIndex(row: 0, col: 3))
             boardIndexToCheck.append(BoardIndex(row: 0, col: 2))
-            checkingPiecesOfColor = #colorLiteral(red: 0.9999960065, green: 1, blue: 1, alpha: 1)
             break
         case theChessBoard.blackKingRook:       // black king side castle 0-0
             boardIndexToCheck.append(BoardIndex(row: 0, col: 4))
             boardIndexToCheck.append(BoardIndex(row: 0, col: 5))
             boardIndexToCheck.append(BoardIndex(row: 0, col: 6))
-            checkingPiecesOfColor = #colorLiteral(red: 0.9999960065, green: 1, blue: 1, alpha: 1)
             break
         default:
             break
@@ -507,7 +508,7 @@ class ChessGame: NSObject {
                         
                         if chessPiece.color == checkingPiecesOfColor {
                             if isNormalMoveValid(forPiece: chessPiece, fromIndex: chessPieceIndex, toIndex: thisBoardIndex) {
-                                retVal = true
+                                retVal = true      // found a piece that has/causes check during castle
                             }
                         }
                     }
@@ -538,7 +539,7 @@ class ChessGame: NSObject {
                             if !castlePathIsClear(fromIndex: source, toIndex: dest) {
                                 return false    // bail out immediately if path isn't clear
                             }
-                            if isCastlingFromThruIntoCheck(forRook: theChessBoard.whiteQueenRook) {
+                            if isCastlingFromThruIntoCheck(forKing: king, forRook: theChessBoard.whiteQueenRook) {
                                 return false    // bail out immediately if castling from/thru/into check
                             }
                             print ("castling to white queen side rook")
@@ -552,7 +553,7 @@ class ChessGame: NSObject {
                             if !castlePathIsClear(fromIndex: source, toIndex: dest) {
                                 return false    // bail out immediately if path isn't clear
                             }
-                            if isCastlingFromThruIntoCheck(forRook: theChessBoard.whiteKingRook) {
+                            if isCastlingFromThruIntoCheck(forKing: king, forRook: theChessBoard.whiteKingRook) {
                                 return false    // bail out immediately if castling from/thru/into check
                             }
                             print ("castling to white king side rook")
@@ -570,7 +571,7 @@ class ChessGame: NSObject {
                             if !castlePathIsClear(fromIndex: source, toIndex: dest) {
                                 return false    // bail out immediately if path isn't clear
                             }
-                            if isCastlingFromThruIntoCheck(forRook: theChessBoard.blackQueenRook) {
+                            if isCastlingFromThruIntoCheck(forKing: king, forRook: theChessBoard.blackQueenRook) {
                                 return false    // bail out immediately if castling from/thru/into check
                             }
                             print ("castling to black queen side rook")
@@ -584,7 +585,7 @@ class ChessGame: NSObject {
                             if !castlePathIsClear(fromIndex: source, toIndex: dest) {
                                 return false    // bail out immediately if path isn't clear
                             }
-                            if isCastlingFromThruIntoCheck(forRook: theChessBoard.blackKingRook) {
+                            if isCastlingFromThruIntoCheck(forKing: king, forRook: theChessBoard.blackKingRook) {
                                 return false    // bail out immediately if castling from/thru/into check
                             }
                             print ("castling to black king side rook")
