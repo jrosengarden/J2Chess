@@ -458,7 +458,7 @@ class ChessGame: NSObject {
     }
     
     // TODO: build castlingFromThruIntoCheck function
-    func isCastlingFromThruIntoCheck(forKing king: King, forRook rook: Rook) -> Bool {
+    func isCastlingFromThruIntoCheck(forRook rook: Rook) -> Bool {
         
         // default value - assume king is not castling from/thru/into check
         var retVal: Bool = false
@@ -538,7 +538,7 @@ class ChessGame: NSObject {
                             if !castlePathIsClear(fromIndex: source, toIndex: dest) {
                                 return false    // bail out immediately if path isn't clear
                             }
-                            if isCastlingFromThruIntoCheck(forKing: king, forRook: theChessBoard.whiteQueenRook) {
+                            if isCastlingFromThruIntoCheck(forRook: theChessBoard.whiteQueenRook) {
                                 return false    // bail out immediately if castling from/thru/into check
                             }
                             print ("castling to white queen side rook")
@@ -552,7 +552,7 @@ class ChessGame: NSObject {
                             if !castlePathIsClear(fromIndex: source, toIndex: dest) {
                                 return false    // bail out immediately if path isn't clear
                             }
-                            if isCastlingFromThruIntoCheck(forKing: king, forRook: theChessBoard.whiteKingRook) {
+                            if isCastlingFromThruIntoCheck(forRook: theChessBoard.whiteKingRook) {
                                 return false    // bail out immediately if castling from/thru/into check
                             }
                             print ("castling to white king side rook")
@@ -570,7 +570,7 @@ class ChessGame: NSObject {
                             if !castlePathIsClear(fromIndex: source, toIndex: dest) {
                                 return false    // bail out immediately if path isn't clear
                             }
-                            if isCastlingFromThruIntoCheck(forKing: king, forRook: theChessBoard.blackQueenRook) {
+                            if isCastlingFromThruIntoCheck(forRook: theChessBoard.blackQueenRook) {
                                 return false    // bail out immediately if castling from/thru/into check
                             }
                             print ("castling to black queen side rook")
@@ -584,7 +584,7 @@ class ChessGame: NSObject {
                             if !castlePathIsClear(fromIndex: source, toIndex: dest) {
                                 return false    // bail out immediately if path isn't clear
                             }
-                            if isCastlingFromThruIntoCheck(forKing: king, forRook: theChessBoard.blackKingRook) {
+                            if isCastlingFromThruIntoCheck(forRook: theChessBoard.blackKingRook) {
                                 return false    // bail out immediately if castling from/thru/into check
                             }
                             print ("castling to black king side rook")
