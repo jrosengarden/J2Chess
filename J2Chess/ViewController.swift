@@ -115,6 +115,12 @@ class ViewController: UIViewController {
 
                 // check if game is over and call displayWinner() if it is
                 if myChessGame.isGameOver() {
+                    
+                    // White just won game so make sure NotationViewController is updated with last move
+                    // since it's only 1/2 move and black's move is what usually kicks off the update
+                    myChessGame.checkMateCondition = true
+                    _ = myChessGame.calcAlgebraicNotation(piece: pieceDragged, fromIndex: sourceIndex, toIndex: destIndex, mode: "WhiteOnly")
+                   
                     displayWinner()
                     return
                 }
@@ -302,7 +308,7 @@ class ViewController: UIViewController {
         self.dispMove.textColor =  #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
         
         // calculate and display chess notation
-        self.dispMove.text = myChessGame.calcAlgebraicNotation(piece: pieceDragged, fromIndex: sourceIndex, toIndex: destIndex)
+        self.dispMove.text = myChessGame.calcAlgebraicNotation(piece: pieceDragged, fromIndex: sourceIndex, toIndex: destIndex, mode: "Normal")
         // debugging
         if self.dispMove.text != "" {
             print (self.dispMove.text!)

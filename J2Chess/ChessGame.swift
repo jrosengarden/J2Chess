@@ -20,7 +20,7 @@ class ChessGame: NSObject {
     var castleNotation:String = ""              // global variable to hold castling notation
     var gameMoves:[String] = []                 // global variable to retain all game moves
     
-    var checkMateCondition:String = ""          // global string to hold checkmate message
+    var checkMateCondition:Bool = false         // checkmate exists
 
     
     init(viewController: ViewController) {
@@ -71,8 +71,8 @@ class ChessGame: NSObject {
                     if isNormalMoveValid(forPiece: aChessPiece, fromIndex: source, toIndex: dest) {
                         move(piece: aChessPiece, fromIndex: source, toIndex: dest, toOrigin: theChessBoard.whiteKing.frame.origin)
                         // AI made the move for Black so update the dispMove label with Black's move
-                        checkMateCondition = "Black"
-                        theChessBoard.vc.dispMove.text = calcAlgebraicNotation(piece: aChessPiece, fromIndex: source, toIndex: dest)
+                        checkMateCondition = true
+                        theChessBoard.vc.dispMove.text = calcAlgebraicNotation(piece: aChessPiece, fromIndex: source, toIndex: dest, mode: "Normal")
                         return
                     }
                     
@@ -142,7 +142,7 @@ class ChessGame: NSObject {
             move(piece: chessPieceToMove, fromIndex: sourceIndex, toIndex: randDestIndex, toOrigin: destOrigin)
             
             // AI made the move for Black so update the dispMove label with Black's move
-            theChessBoard.vc.dispMove.text = calcAlgebraicNotation(piece: chessPieceToMove, fromIndex: sourceIndex, toIndex: randDestIndex)
+            theChessBoard.vc.dispMove.text = calcAlgebraicNotation(piece: chessPieceToMove, fromIndex: sourceIndex, toIndex: randDestIndex, mode: "Normal")
             
             // for visual clarity turn black piece just moved to red and set
             // ViewController variable "chessPieceToSetBackToBlack" to this chess piece
@@ -730,7 +730,8 @@ class ChessGame: NSObject {
     
     // calculate the algebraic notation version of the move then return it to caller
     // std chess notation used is ranks:1 2 3 4 5 6 7 8 | files:a b c d e f g h | pieces:R N B Q K
-    func calcAlgebraicNotation(piece chessPieceToMove: UIChessPiece, fromIndex sourceIndex: BoardIndex, toIndex destIndex: BoardIndex) -> String {
+    // mode can be "Normal" (both white & black move) or "WhiteOnly" (only white moves due to checkmate)
+    func calcAlgebraicNotation(piece chessPieceToMove: UIChessPiece, fromIndex sourceIndex: BoardIndex, toIndex destIndex: BoardIndex, mode type:String) -> String {
         
         var algebraicSourcePosition:String?         // std chess notation for source position
         var algebraicDestPosition:String?           // std chess notation for destination position
@@ -875,7 +876,7 @@ class ChessGame: NSObject {
                 moveText! += " " + self.castleNotation
                 self.castleNotation = ""
             }
-            if checkMateCondition != "" {
+            if checkMateCondition  {
                 moveText! = moveText!.replacingOccurrences(of: "+", with: "#")
             }
             gameMoves.append(moveText!)
@@ -895,6 +896,13 @@ class ChessGame: NSObject {
             }
             while firstHalfMove!.count < 10 {
                 firstHalfMove! += " "
+            }
+            // White just won so update the gameMoves with the firstHalfMove!
+            if type == "WhiteOnly" {
+                if checkMateCondition  {
+                    firstHalfMove! = firstHalfMove!.replacingOccurrences(of: "+", with: "#")
+                }
+                gameMoves.append(firstHalfMove!)
             }
 
         }
