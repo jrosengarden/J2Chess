@@ -26,7 +26,6 @@ class ViewController: UIViewController {
     static var TILE_SIZE: Int = 40
     var myChessGame: ChessGame!
     var chessPieces: [UIChessPiece]!
-    var chessPieceToChangeBackToBlack: UIChessPiece?            // black piece to flip back to black
     
     // set in StartScreen.swift class based on which button was pressed
     // if playing computer set to true, if playing another human set to false
@@ -50,9 +49,6 @@ class ViewController: UIViewController {
         
         if pieceDragged != nil {
             sourceOrigin = pieceDragged.frame.origin
-            
-            // change color of piece moved by computer on previous turn back to black
-            chessPieceToChangeBackToBlack?.textColor = .black
         }
     }
     
@@ -71,10 +67,7 @@ class ViewController: UIViewController {
     // and how much is insignificant and should result in a call to touchesCancelled(..)
     // NOTE:  It seems to be a function of possibly moving the finger too fast???
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        
-        if pieceDragged != nil {
-            pieceDragged.frame.origin = sourceOrigin
-        }
+        pieceDragged.frame.origin = sourceOrigin
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -133,7 +126,6 @@ class ViewController: UIViewController {
             }
             
         }
-
     }
     
     func resumeGame() {
