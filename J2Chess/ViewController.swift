@@ -26,6 +26,7 @@ class ViewController: UIViewController {
     static var TILE_SIZE: Int = 40
     var myChessGame: ChessGame!
     var chessPieces: [UIChessPiece]!
+    var chessPieceToSetBackToBlack: UIChessPiece?       // current piece that was turned red for clarity
     
     // set in StartScreen.swift class based on which button was pressed
     // if playing computer set to true, if playing another human set to false
@@ -48,6 +49,7 @@ class ViewController: UIViewController {
         pieceDragged = touches.first!.view as? UIChessPiece
         
         if pieceDragged != nil {
+            chessPieceToSetBackToBlack?.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)  // set red piece back to black
             sourceOrigin = pieceDragged.frame.origin
         }
     }
@@ -67,7 +69,9 @@ class ViewController: UIViewController {
     // and how much is insignificant and should result in a call to touchesCancelled(..)
     // NOTE:  It seems to be a function of possibly moving the finger too fast???
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        pieceDragged.frame.origin = sourceOrigin
+        if pieceDragged != nil {
+            pieceDragged.frame.origin = sourceOrigin
+        }
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -161,7 +165,14 @@ class ViewController: UIViewController {
     
     func promote(pawn pawnToBePromoted: Pawn, into pieceName: String) {
         
-        let pawnColor = pawnToBePromoted.color
+        var pawnColor:UIColor = .clear
+        
+        // pawnToBePromoted might still be red so change it to black before the promotion occurs
+        if pawnToBePromoted.color == .red {
+            pawnColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+        } else {
+            pawnColor = pawnToBePromoted.color
+        }
         let pawnFrame = pawnToBePromoted.frame
         let pawnIndex = ChessBoard.indexOf(origin: pawnToBePromoted.frame.origin)
         

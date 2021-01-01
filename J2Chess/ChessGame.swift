@@ -19,6 +19,8 @@ class ChessGame: NSObject {
     
     var castleNotation:String = ""              // global variable to hold castling notation
     var gameMoves:[String] = []                 // global variable to retain all game moves
+    
+    var checkMateCondition:String = ""          // global string to hold checkmate message
 
     
     init(viewController: ViewController) {
@@ -68,6 +70,9 @@ class ChessGame: NSObject {
                     
                     if isNormalMoveValid(forPiece: aChessPiece, fromIndex: source, toIndex: dest) {
                         move(piece: aChessPiece, fromIndex: source, toIndex: dest, toOrigin: theChessBoard.whiteKing.frame.origin)
+                        // AI made the move for Black so update the dispMove label with Black's move
+                        checkMateCondition = "Black"
+                        theChessBoard.vc.dispMove.text = calcAlgebraicNotation(piece: aChessPiece, fromIndex: source, toIndex: dest)
                         return
                     }
                     
@@ -138,6 +143,12 @@ class ChessGame: NSObject {
             
             // AI made the move for Black so update the dispMove label with Black's move
             theChessBoard.vc.dispMove.text = calcAlgebraicNotation(piece: chessPieceToMove, fromIndex: sourceIndex, toIndex: randDestIndex)
+            
+            // for visual clarity turn black piece just moved to red and set
+            // ViewController variable "chessPieceToSetBackToBlack" to this chess piece
+            // so it can immediately be turned back to black when the player touches to screen
+            chessPieceToMove.textColor = .red
+            theChessBoard.vc.chessPieceToSetBackToBlack = chessPieceToMove
             
             moveFound = true
         }
@@ -864,10 +875,14 @@ class ChessGame: NSObject {
                 moveText! += " " + self.castleNotation
                 self.castleNotation = ""
             }
+            if checkMateCondition != "" {
+                moveText! = moveText!.replacingOccurrences(of: "+", with: "#")
+            }
             gameMoves.append(moveText!)
         } else {
             if self.castleNotation == "" {
-                firstHalfMove! = "\(moveCount ?? 0): \(thisPiece ?? "")"
+                firstHalfMove! = moveCount! < 10 ? " " : ""
+                firstHalfMove! += "\(moveCount ?? 0): \(thisPiece ?? "")"
                 firstHalfMove! += captureMade ? "x" : ""
                 //firstHalfMove! += "\(algebraicSourcePosition ?? "")"
                 firstHalfMove! += "\(algebraicDestPosition ?? "")"
