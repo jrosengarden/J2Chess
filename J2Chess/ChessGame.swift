@@ -898,6 +898,7 @@ class ChessGame: NSObject {
                 firstHalfMove! += " "
             }
             // White just won so update the gameMoves with the firstHalfMove!
+            // since black won't be moving
             if type == "WhiteOnly" {
                 if checkMateCondition  {
                     firstHalfMove! = firstHalfMove!.replacingOccurrences(of: "+", with: "#")
