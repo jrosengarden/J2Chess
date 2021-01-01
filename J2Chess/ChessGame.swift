@@ -135,6 +135,9 @@ class ChessGame: NSObject {
             }
             
             move(piece: chessPieceToMove, fromIndex: sourceIndex, toIndex: randDestIndex, toOrigin: destOrigin)
+            // change color of the piece the computer moved so player can clearly see move
+            chessPieceToMove.textColor = #colorLiteral(red: 1, green: 0.1857388616, blue: 0.5733950138, alpha: 1)
+            theChessBoard.vc.chessPieceToChangeBackToBlack = chessPieceToMove
             
             // AI made the move for Black so update the dispMove label with Black's move
             theChessBoard.vc.dispMove.text = calcAlgebraicNotation(piece: chessPieceToMove, fromIndex: sourceIndex, toIndex: randDestIndex)
