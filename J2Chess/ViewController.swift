@@ -51,6 +51,7 @@ class ViewController: UIViewController {
         if pieceDragged != nil {
             chessPieceToSetBackToBlack?.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)  // set red piece back to black
             sourceOrigin = pieceDragged.frame.origin
+            dispMove.text = ""
         }
     }
     
@@ -109,6 +110,14 @@ class ViewController: UIViewController {
             let destIndex = ChessBoard.indexOf(origin: destOrigin)
             
             if myChessGame.isMoveValid(piece: pieceDragged, fromIndex: sourceIndex, toIndex: destIndex){
+                
+                if myChessGame.getPlayerChecked() != nil && !myChessGame.doesMoveClearCheck(piece: pieceDragged, fromIndex: sourceIndex, toIndex: destIndex) {
+                    
+                    print("Move did not clear check")
+                    // move isn't valid so return dragged piece to it's origin
+                    pieceDragged.frame.origin = sourceOrigin
+                    return
+                }
                 
                 // move is valid so move the piece
                 myChessGame.move(piece: pieceDragged, fromIndex: sourceIndex, toIndex: destIndex, toOrigin: destOrigin)

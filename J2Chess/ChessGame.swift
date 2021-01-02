@@ -430,6 +430,31 @@ class ChessGame: NSObject {
         return true
     }
     
+    func doesMoveClearCheck(piece pieceDragged: UIChessPiece, fromIndex source: BoardIndex, toIndex dest: BoardIndex) -> Bool {
+        
+        // default return value of function is true - assume move does clear check
+        var retVal:Bool = true
+        
+        // make the actual move, see if the check still exists, then undo the move
+        let pieceDestOrigin = ChessBoard.getFrame(forRow: dest.row, forCol: dest.col).origin
+        let pieceSourceOrigin = ChessBoard.getFrame(forRow: source.row, forCol: source.col).origin
+        move(piece: pieceDragged, fromIndex: source, toIndex: dest, toOrigin: pieceDestOrigin)
+        
+        // does check condition still exist
+        if getPlayerChecked() != nil {
+            retVal = false
+        }
+        
+        move(piece: pieceDragged, fromIndex: dest, toIndex: source, toOrigin: pieceSourceOrigin)
+        
+        if !retVal {
+            theChessBoard.vc.dispMove.text = "Intended move leaves King in check"
+        }
+
+        
+        return retVal
+    }
+    
     // check to insure squares king is passing over on the castle move are clear (Dummy)
     func castlePathIsClear(fromIndex source: BoardIndex, toIndex dest: BoardIndex) -> Bool {
         
