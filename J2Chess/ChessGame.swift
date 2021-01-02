@@ -433,6 +433,9 @@ class ChessGame: NSObject {
     // check to insure squares king is passing over on the castle move are clear (Dummy)
     func castlePathIsClear(fromIndex source: BoardIndex, toIndex dest: BoardIndex) -> Bool {
         
+        // default return value
+        var retVal:Bool = true
+        
         var increaseCol:Int = 0
         
         if dest.col > source.col {
@@ -448,7 +451,7 @@ class ChessGame: NSObject {
         // and the move will fail
         while nextCol != dest.col {
             if !(theChessBoard.board[source.row][nextCol] is Dummy) {
-                return false
+                retVal = false
             }
             nextCol += increaseCol
         }
@@ -458,12 +461,16 @@ class ChessGame: NSObject {
         if increaseCol == -1 {
             nextCol += increaseCol
             if !(theChessBoard.board[source.row][nextCol] is Dummy) {
-                return false
+                retVal = false
             }
         }
         
+        if !retVal {
+            theChessBoard.vc.dispMove.text = "Castling Path is not clear!!"
+        }
         
-        return true
+        
+        return retVal
     }
     
     // function to move the rook in a castling move after all checks for legality have been cleared
@@ -534,6 +541,10 @@ class ChessGame: NSObject {
                     }
                 }
             }
+        }
+        
+        if retVal {
+            theChessBoard.vc.dispMove.text = "Castling from, thru, or into check!!"
         }
         
         return retVal
