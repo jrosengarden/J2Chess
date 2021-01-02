@@ -445,6 +445,7 @@ class ChessGame: NSObject {
             retVal = false
         }
         
+        // undo the move
         move(piece: pieceDragged, fromIndex: dest, toIndex: source, toOrigin: pieceSourceOrigin)
         
         if !retVal {
