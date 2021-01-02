@@ -433,7 +433,7 @@ class ChessGame: NSObject {
     // check to insure squares king is passing over on the castle move are clear (Dummy)
     func castlePathIsClear(fromIndex source: BoardIndex, toIndex dest: BoardIndex) -> Bool {
         
-        // default return value
+        // default return value - assume path is clear
         var retVal:Bool = true
         
         var increaseCol:Int = 0
