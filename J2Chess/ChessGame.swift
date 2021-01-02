@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import AudioToolbox
 
 class ChessGame: NSObject {
     
@@ -252,6 +253,7 @@ class ChessGame: NSObject {
         
         guard isMoveOnBoard(forPieceFrom: sourceIndex, thatGoesTo: destIndex) else {
             theChessBoard.vc.dispMove.text = "MOVE IS NOT ON BOARD"
+            AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
             theChessBoard.vc.dispMove.textColor = isWhiteTurn ? #colorLiteral(red: 0.9999960065, green: 1, blue: 1, alpha: 1) : #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
             print(theChessBoard.vc.dispMove.text!)
             return false
@@ -261,6 +263,7 @@ class ChessGame: NSObject {
             theChessBoard.vc.dispMove.text = "NOT"
             theChessBoard.vc.dispMove.text! += isWhiteTurn ? " BLACK'S TURN" : " WHITE'S TURN"
             theChessBoard.vc.dispMove.textColor = isWhiteTurn ? #colorLiteral(red: 0.9999960065, green: 1, blue: 1, alpha: 1) : #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+            AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
             print(theChessBoard.vc.dispMove.text!)
             return false
         }
@@ -281,6 +284,7 @@ class ChessGame: NSObject {
         guard source != dest else {
             if isWhiteTurn || !theChessBoard.vc.isAgainstAI {
                 theChessBoard.vc.dispMove.text = "MOVING PIECE ON ITS OWN POSITION"
+                AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
             }
             theChessBoard.vc.dispMove.textColor = isWhiteTurn ? #colorLiteral(red: 0.9999960065, green: 1, blue: 1, alpha: 1) : #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
             print (theChessBoard.vc.dispMove.text!)
@@ -292,6 +296,7 @@ class ChessGame: NSObject {
         guard !isAttackingAlliedPiece(sourceChessPiece: piece, destIndex: dest) else {
             if isWhiteTurn || !theChessBoard.vc.isAgainstAI {
                 theChessBoard.vc.dispMove.text = "ATTACKING YOUR OWN PIECE"
+                AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
             }
                 theChessBoard.vc.dispMove.textColor = isWhiteTurn ? #colorLiteral(red: 0.9999960065, green: 1, blue: 1, alpha: 1) : #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
                 print(theChessBoard.vc.dispMove.text!)
@@ -450,6 +455,7 @@ class ChessGame: NSObject {
         
         if !retVal {
             theChessBoard.vc.dispMove.text = "Intended move leaves King in check"
+            AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
         }
 
         
@@ -493,6 +499,7 @@ class ChessGame: NSObject {
         
         if !retVal {
             theChessBoard.vc.dispMove.text = "Castling Path is not clear!!"
+            AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
         }
         
         
@@ -571,6 +578,7 @@ class ChessGame: NSObject {
         
         if retVal {
             theChessBoard.vc.dispMove.text = "Castling from, thru, or into check!!"
+            AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
         }
         
         return retVal
