@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import AudioToolbox
 
 class ViewController: UIViewController {
     
@@ -238,6 +239,7 @@ class ViewController: UIViewController {
         
         if playerChecked != nil {
             lblDisplayCheckOUTLET.text = playerChecked! + " is in check!"
+            AudioServicesPlayAlertSoundWithCompletion(SystemSoundID(kSystemSoundID_Vibrate)) { }
         } else {
             lblDisplayCheckOUTLET.text = ""
         }
