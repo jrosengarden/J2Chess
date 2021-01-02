@@ -454,6 +454,15 @@ class ChessGame: NSObject {
         }
         
         
+        // if castling to queen side need to be sure knight square is a dummy
+        if increaseCol == -1 {
+            nextCol += increaseCol
+            if !(theChessBoard.board[source.row][nextCol] is Dummy) {
+                return false
+            }
+        }
+        
+        
         return true
     }
     
@@ -881,17 +890,16 @@ class ChessGame: NSObject {
             }
             gameMoves.append(moveText!)
         } else {
+            firstHalfMove! = moveCount! < 10 ? " " : ""
             if self.castleNotation == "" {
-                firstHalfMove! = moveCount! < 10 ? " " : ""
                 firstHalfMove! += "\(moveCount ?? 0): \(thisPiece ?? "")"
                 firstHalfMove! += captureMade ? "x" : ""
-                //firstHalfMove! += "\(algebraicSourcePosition ?? "")"
                 firstHalfMove! += "\(algebraicDestPosition ?? "")"
                 if theChessBoard.vc.lblDisplayCheckOUTLET.text == "Black is in check!" {
                     firstHalfMove! += "+"
                 }
             } else {
-                firstHalfMove! = "\(moveCount ?? 0): " + self.castleNotation + " "
+                firstHalfMove! += "\(moveCount ?? 0): " + self.castleNotation + " "
                 self.castleNotation = ""
             }
             while firstHalfMove!.count < 10 {
