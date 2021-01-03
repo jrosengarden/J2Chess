@@ -166,8 +166,8 @@ class ViewController: UIViewController {
         if isAgainstAI == true && !myChessGame.isWhiteTurn {
             myChessGame.makeAIMove()
             if myChessGame.isGameOver() {
-            displayWinner()
-            return
+                displayWinner()
+                return
             }
             
             if shouldPromotePawn() {
