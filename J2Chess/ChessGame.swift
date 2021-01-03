@@ -459,7 +459,9 @@ class ChessGame: NSObject {
         // default return value of function is true - assume move does clear check
         var retVal:Bool = true
         
-        // make the actual move, see if the check still exists, then undo the move
+        // save the destination piece, make the actual move
+        // see if the check still exist then undo the move (put destination piece back in place)
+        let destPiece:Piece = theChessBoard.board[dest.row][dest.col]
         let pieceDestOrigin = ChessBoard.getFrame(forRow: dest.row, forCol: dest.col).origin
         let pieceSourceOrigin = ChessBoard.getFrame(forRow: source.row, forCol: source.col).origin
         move(piece: pieceDragged, fromIndex: source, toIndex: dest, toOrigin: pieceDestOrigin)
@@ -469,8 +471,9 @@ class ChessGame: NSObject {
             retVal = false
         }
         
-        // undo the move
+        // undo
         move(piece: pieceDragged, fromIndex: dest, toIndex: source, toOrigin: pieceSourceOrigin)
+        theChessBoard.board[dest.row][dest.col] = destPiece
         
         if !retVal {
             theChessBoard.vc.dispMove.text = "Intended move leaves King in check"
