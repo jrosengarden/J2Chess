@@ -460,7 +460,7 @@ class ChessGame: NSObject {
         var retVal:Bool = true
         
         // save the destination piece, make the actual move
-        // see if the check still exist then undo the move (put destination piece back in place)
+        // see if the check still exists then undo the move (put destination piece back in place)
         let destPiece:Piece = theChessBoard.board[dest.row][dest.col]
         let pieceDestOrigin = ChessBoard.getFrame(forRow: dest.row, forCol: dest.col).origin
         let pieceSourceOrigin = ChessBoard.getFrame(forRow: source.row, forCol: source.col).origin
@@ -471,7 +471,7 @@ class ChessGame: NSObject {
             retVal = false
         }
         
-        // undo
+        // undo the move
         move(piece: pieceDragged, fromIndex: dest, toIndex: source, toOrigin: pieceSourceOrigin)
         theChessBoard.board[dest.row][dest.col] = destPiece
         
