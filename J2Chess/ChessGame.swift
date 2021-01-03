@@ -129,6 +129,19 @@ class ChessGame: NSObject {
                     numberOfTriesToEscapeCheck += 1
                     continue searchForMoves
                 }
+            } else {
+                // tried 1000 moves so it has to be checkmate
+                print ("CheckMate")
+                
+                // remove the black king so the rest of the code works 'naturally'
+                theChessBoard.remove(piece: theChessBoard.blackKing)
+                
+                // update the NotationViewController with the last move
+                firstHalfMove! = firstHalfMove!.replacingOccurrences(of: "+", with: "#")
+                gameMoves.append(firstHalfMove!)
+                
+                // hard exit due to checkmate
+                break
             }
             
             // undo move
@@ -140,18 +153,24 @@ class ChessGame: NSObject {
                 return
             }
             
-            move(piece: chessPieceToMove, fromIndex: sourceIndex, toIndex: randDestIndex, toOrigin: destOrigin)
+            // insure contemplated moved doesn't leave black in check
+            if doesMoveClearCheck(piece: chessPieceToMove, fromIndex: sourceIndex, toIndex: randDestIndex) {
+                move(piece: chessPieceToMove, fromIndex: sourceIndex, toIndex: randDestIndex, toOrigin: destOrigin)
             
-            // AI made the move for Black so update the dispMove label with Black's move
-            theChessBoard.vc.dispMove.text = calcAlgebraicNotation(piece: chessPieceToMove, fromIndex: sourceIndex, toIndex: randDestIndex, mode: "Normal")
             
-            // for visual clarity turn black piece just moved to red and set
-            // ViewController variable "chessPieceToSetBackToBlack" to this chess piece
-            // so it can immediately be turned back to black when the player touches to screen
-            chessPieceToMove.textColor = .red
-            theChessBoard.vc.chessPieceToSetBackToBlack = chessPieceToMove
-            
-            moveFound = true
+                // AI made the move for Black so update the dispMove label with Black's move
+                theChessBoard.vc.dispMove.text = calcAlgebraicNotation(piece: chessPieceToMove, fromIndex: sourceIndex, toIndex: randDestIndex, mode: "Normal")
+                
+                // for visual clarity turn black piece just moved to red and set
+                // ViewController variable "chessPieceToSetBackToBlack" to this chess piece
+                // so it can immediately be turned back to black when the player touches to screen
+                chessPieceToMove.textColor = .red
+                theChessBoard.vc.chessPieceToSetBackToBlack = chessPieceToMove
+                
+                moveFound = true
+            } else {
+                moveFound = false
+            }
         }
     }
     

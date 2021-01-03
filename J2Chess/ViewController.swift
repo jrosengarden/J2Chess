@@ -173,7 +173,9 @@ class ViewController: UIViewController {
             if shouldPromotePawn() {
                 promote(pawn: myChessGame.getPawnToBePromoted()!, into: "Queen")
             }
-            displayCheck()
+            if myChessGame.getPlayerChecked() != "Black" {
+                displayCheck()
+            }
             myChessGame.nextTurn()
             updateTurnOnScreen()
         }
