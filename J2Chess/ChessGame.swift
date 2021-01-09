@@ -383,6 +383,40 @@ class ChessGame: NSObject {
         // insure the dest square is NOT a Dummy (actually has a chess piece on it)
             if !(theChessBoard.board[dest.row][dest.col] is Dummy) {
                 return true
+            } else {
+                // the dest square IS a Dummy so handle possible en Passant move
+                
+                // set attackRow based on color of pawn
+                var attackRow:Int = 0
+                switch pawn.color {
+                case #colorLiteral(red: 0.9999960065, green: 1, blue: 1, alpha: 1):
+                    attackRow = 1
+                case #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1):
+                    attackRow = -1
+                default:
+                    break
+                }
+                
+                // if there isn't a pawn behind dest then it isn't en Passant and it's an illegal move
+                guard let attackPiece = theChessBoard.board[dest.row + attackRow][dest.col] as? Pawn else {
+                    return false
+                }
+                // there is a pawn behind dest so make sure it's the opponent color
+                if attackPiece.color != pawn.color {
+                    // correct color so we have a valid en Passant move....almost
+                    if (pawn.color == #colorLiteral(red: 0.9999960065, green: 1, blue: 1, alpha: 1) && dest.row == 2) || (pawn.color == #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1) && dest.row == 5) {
+                        // dest.row is correct row so it's a legal en Passant move
+                        // remove the attacked pawn and return true (legal move)
+                        theChessBoard.remove(piece: attackPiece)
+                        return true
+                    } else {
+                        // incorrect row for en Passant move so it's an illegal move
+                        return false
+                    }
+                } else {
+                    // incorrect color so not en Passant move and it's an illegal move
+                    return false
+                }
             }
             
         }
@@ -458,25 +492,23 @@ class ChessGame: NSObject {
         
         // default return value of function is true - assume move does clear check
         var retVal:Bool = true
+                
+        // simulate the move on board matrix
+        let pieceTaken = theChessBoard.board[dest.row][dest.col]
+        theChessBoard.board[dest.row][dest.col] = theChessBoard.board[source.row][dest.col]
+        theChessBoard.board[source.row][source.col] = Dummy()
         
-        // save the destination piece, make the actual move
-        // see if the check still exists then undo the move (put destination piece back in place)
-        let destPiece:Piece = theChessBoard.board[dest.row][dest.col]
-        let pieceDestOrigin = ChessBoard.getFrame(forRow: dest.row, forCol: dest.col).origin
-        let pieceSourceOrigin = ChessBoard.getFrame(forRow: source.row, forCol: source.col).origin
-        move(piece: pieceDragged, fromIndex: source, toIndex: dest, toOrigin: pieceDestOrigin)
-        
-        // does check condition still exist
-        if getPlayerChecked() != nil {
+        // does check condition still exist and is it a valid check condition
+        if (getPlayerChecked() == "Black" && !isWhiteTurn) || (getPlayerChecked() == "White" && isWhiteTurn) {
             retVal = false
         }
         
         // undo the move
-        move(piece: pieceDragged, fromIndex: dest, toIndex: source, toOrigin: pieceSourceOrigin)
-        theChessBoard.board[dest.row][dest.col] = destPiece
+        theChessBoard.board[source.row][source.col] = theChessBoard.board[dest.row][dest.col]
+        theChessBoard.board[dest.row][dest.col] = pieceTaken
         
         if !retVal {
-            theChessBoard.vc.dispMove.text = "Intended move leaves King in check"
+            theChessBoard.vc.dispMove.text = "Intended move leaves/puts King in check"
             AudioServicesPlayAlertSoundWithCompletion(SystemSoundID(kSystemSoundID_Vibrate)) { }
         }
 

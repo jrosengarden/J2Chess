@@ -120,6 +120,15 @@ class ViewController: UIViewController {
                     return
                 }
                 
+                if !myChessGame.doesMoveClearCheck(piece: pieceDragged, fromIndex: sourceIndex, toIndex: destIndex) {
+                    
+                    print("Move puts King in check")
+                    // move isn't valid so return dragged piece to it's origin
+                    pieceDragged.frame.origin = sourceOrigin
+                    return
+                }
+                
+                
                 // move is valid so move the piece
                 myChessGame.move(piece: pieceDragged, fromIndex: sourceIndex, toIndex: destIndex, toOrigin: destOrigin)
 
