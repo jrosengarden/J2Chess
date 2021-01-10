@@ -28,6 +28,8 @@ class ViewController: UIViewController {
     var myChessGame: ChessGame!
     var chessPieces: [UIChessPiece]!
     var chessPieceToSetBackToBlack: UIChessPiece?       // current piece that was turned red for clarity
+    var whitePawnForEnPassant:String = ""
+    var blackPawnForEnPassant:String = ""
     
     // set in StartScreen.swift class based on which button was pressed
     // if playing computer set to true, if playing another human set to false

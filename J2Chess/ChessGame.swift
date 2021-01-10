@@ -322,9 +322,11 @@ class ChessGame: NSObject {
                 return false
                 }
 
+        var pieceMovedNotPawn:Bool = true
         
         switch piece {
         case is Pawn:
+            pieceMovedNotPawn = false
             return isMoveValid(forPawn: piece as! Pawn, fromIndex: source, toIndex: dest)
         case is Rook, is Bishop, is Queen:
             return isMoveValid(forRookOrBishopOrQueen: piece, fromIndex: source, toIndex: dest)
@@ -337,6 +339,15 @@ class ChessGame: NSObject {
             return isMoveValid(forKing: piece as! King, fromIndex: source, toIndex: dest)
         default:
             break
+        }
+        
+        // if the piece moved wasn't a pawn then zero out the valid en Passant string
+        if pieceMovedNotPawn {
+            if piece.color == #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1) {
+                theChessBoard.vc.blackPawnForEnPassant = ""
+            } else {
+                theChessBoard.vc.whitePawnForEnPassant = ""
+            }
         }
         
         return true
@@ -368,6 +379,12 @@ class ChessGame: NSObject {
                 // if the dest square is a Dummy and the square the pawn moved past is a dummy
                 // then we have a good move
                 if theChessBoard.board[dest.row][dest.col] is Dummy && theChessBoard.board[dest.row - moveForward][dest.col] is Dummy {
+                    // update the en Passant string - this pawn subject to en Passant
+                    if pawn.color == #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1) {
+                        theChessBoard.vc.blackPawnForEnPassant = String(dest.row) + String(dest.col)
+                    } else {
+                        theChessBoard.vc.whitePawnForEnPassant = String(dest.row) + String(dest.col)
+                    }
                     return true
                 }
             // if pawn advanced by 1
@@ -375,6 +392,12 @@ class ChessGame: NSObject {
             } else {
                 // if the dest square is a dummy then we have a good move
                 if theChessBoard.board[dest.row][dest.col] is Dummy {
+                    // update the en Passant string for - this pawn NOT subject to en Passant
+                    if pawn.color == #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1) {
+                        theChessBoard.vc.blackPawnForEnPassant = ""
+                    } else {
+                        theChessBoard.vc.whitePawnForEnPassant = ""
+                    }
                     return true
                 }
             }
@@ -397,12 +420,29 @@ class ChessGame: NSObject {
                     break
                 }
                 
+                
                 // if there isn't a pawn behind dest then it isn't en Passant and it's an illegal move
                 guard let attackPiece = theChessBoard.board[dest.row + attackRow][dest.col] as? Pawn else {
                     return false
                 }
-                // there is a pawn behind dest so make sure it's the opponent color
-                if attackPiece.color != pawn.color {
+                
+                // set default en Passant allowed to false
+                var enPassantValid:Bool = false
+                
+                // make sure the piece being attacked JUST moved forward two squares
+                if pawn.color == #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1) {
+                    if theChessBoard.vc.whitePawnForEnPassant == String(dest.row + attackRow) + String(dest.col) {
+                        enPassantValid = true
+                    }
+                } else {
+                    if theChessBoard.vc.blackPawnForEnPassant == String(dest.row + attackRow) + String(dest.col) {
+                        enPassantValid = true
+                    }
+                }
+                
+                // if en Passant is allowed then
+                // also make sure there is a pawn behind dest so make sure it's the opponent color
+                if attackPiece.color != pawn.color && enPassantValid {
                     // correct color so we have a valid en Passant move....almost
                     if (pawn.color == #colorLiteral(red: 0.9999960065, green: 1, blue: 1, alpha: 1) && dest.row == 2) || (pawn.color == #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1) && dest.row == 5) {
                         // dest.row is correct row so it's a legal en Passant move
