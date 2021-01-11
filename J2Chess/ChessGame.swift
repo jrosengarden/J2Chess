@@ -535,7 +535,7 @@ class ChessGame: NSObject {
                 
         // simulate the move on board matrix
         let pieceTaken = theChessBoard.board[dest.row][dest.col]
-        theChessBoard.board[dest.row][dest.col] = theChessBoard.board[source.row][dest.col]
+        theChessBoard.board[dest.row][dest.col] = theChessBoard.board[source.row][source.col]
         theChessBoard.board[source.row][source.col] = Dummy()
         
         // does check condition still exist and is it a valid check condition
