@@ -30,6 +30,7 @@ class ViewController: UIViewController {
     var chessPieceToSetBackToBlack: UIChessPiece?       // current piece that was turned red for clarity
     var whitePawnForEnPassant:String = ""
     var blackPawnForEnPassant:String = ""
+    var AIFeedBack:String = ""
     
     // set in StartScreen.swift class based on which button was pressed
     // if playing computer set to true, if playing another human set to false
@@ -175,7 +176,13 @@ class ViewController: UIViewController {
         
         // make AI move, if necessary
         if isAgainstAI == true && !myChessGame.isWhiteTurn {
+            
+            // reset pieceToRemove (needed for calcAlgebraicNotation)
+            myChessGame.pieceToRemove = Dummy()
+            
             myChessGame.makeAIMove()
+            print("AI: -----------------")
+            
             if myChessGame.isGameOver() {
                 displayWinner()
                 return

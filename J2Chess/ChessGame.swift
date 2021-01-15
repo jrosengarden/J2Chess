@@ -74,6 +74,7 @@ class ChessGame: NSObject {
                         // AI made the move for Black so update the dispMove label with Black's move
                         checkMateCondition = true
                         theChessBoard.vc.dispMove.text = calcAlgebraicNotation(piece: aChessPiece, fromIndex: source, toIndex: dest, mode: "Normal")
+                        print("AI: ATTACKED WHITE KING")
                         return
                     }
                     
@@ -84,6 +85,7 @@ class ChessGame: NSObject {
         // attack undefended white piece, if there is no check on black king
         if getPlayerChecked() == nil {
             if didAttackUndefendedPiece() {
+                print("AI: ATTACKED UNDEFENDED PIECE")
                 return
             }
         }
@@ -150,16 +152,26 @@ class ChessGame: NSObject {
             
             // try best move if any good one
             if didBestMoveForAI(forScoreOver: 2) {
+                print("AI: DID MAKE BEST MOVE")
+                
                 return
             }
             
             // insure contemplated moved doesn't leave black in check
             if doesMoveClearCheck(piece: chessPieceToMove, fromIndex: sourceIndex, toIndex: randDestIndex) {
-                move(piece: chessPieceToMove, fromIndex: sourceIndex, toIndex: randDestIndex, toOrigin: destOrigin)
-            
-            
+
+                // make the AI move
+                if numberOfTriesToEscapeCheck == 0 || numberOfTriesToEscapeCheck == 1000 {
+                    print("AI: MADE SIMPLE RANDOM MOVE")
+                    theChessBoard.vc.AIFeedBack = "AI: Simple Random Move"
+                } else {
+                    print("AI: MADE RANDOM MOVE TO ESCAPE CHECK")
+                    theChessBoard.vc.AIFeedBack = "AI: Escaped Check"
+                }
+                
                 // AI made the move for Black so update the dispMove label with Black's move
                 theChessBoard.vc.dispMove.text = calcAlgebraicNotation(piece: chessPieceToMove, fromIndex: sourceIndex, toIndex: randDestIndex, mode: "Normal")
+                move(piece: chessPieceToMove, fromIndex: sourceIndex, toIndex: randDestIndex, toOrigin: destOrigin)
                 
                 // for visual clarity turn black piece just moved to red and set
                 // ViewController variable "chessPieceToSetBackToBlack" to this chess piece
@@ -174,11 +186,161 @@ class ChessGame: NSObject {
         }
     }
     
+    func getScoreForLocation(ofPiece aChessPiece: UIChessPiece) -> Int {
+        
+        var locationScore:Int = 0
+        
+        guard let source = theChessBoard.getIndex(forChessPiece: aChessPiece) else {
+            return 0
+        }
+        
+        for row in 0..<theChessBoard.ROWS {
+            for col in 0..<theChessBoard.COLS {
+                
+                let dest = BoardIndex(row: row, col: col)
+                
+                if theChessBoard.board[row][col] is UIChessPiece {
+                    if isNormalMoveValid(forPiece: aChessPiece, fromIndex: source, toIndex: dest, canAttackAllies: true) {
+                        locationScore += 1
+                    }
+                }
+            }
+        }
+        
+        return locationScore
+    }
+    
     func didBestMoveForAI(forScoreOver limit: Int) -> Bool {
+        
+        guard getPlayerChecked() != "Black" else {
+            return false
+        }
+        
+        var bestNetScore:Int = -10
+        var bestPiece:UIChessPiece!
+        var bestDest:BoardIndex!
+        var bestSource:BoardIndex!
+        var bestOrigin:CGPoint!
+        
+        for aChessPiece in theChessBoard.vc.chessPieces {
+            
+            guard aChessPiece.color == #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1) else {
+                continue
+            }
+            
+            guard let source = theChessBoard.getIndex(forChessPiece: aChessPiece) else {
+                continue
+            }
+            
+            let actualLocationScore = getScoreForLocation(ofPiece: aChessPiece)
+            let possibleDestinations = getArrayOfPossibleMoves(forPiece: aChessPiece)
+            
+            for dest in possibleDestinations {
+                
+                var nextLocationScore:Int = 0
+                
+                // simulate move
+                let pieceTaken = theChessBoard.board[dest.row][dest.col]
+                theChessBoard.board[dest.row][dest.col] = theChessBoard.board[source.row][source.col]
+                theChessBoard.board[source.row][source.col] = Dummy()
+                
+                nextLocationScore = getScoreForLocation(ofPiece: aChessPiece)
+                
+                let netScore = nextLocationScore - actualLocationScore
+                
+                if netScore > bestNetScore {
+                    bestNetScore = netScore
+                    bestPiece = aChessPiece
+                    bestDest = dest
+                    bestSource = source
+                    bestOrigin = ChessBoard.getFrame(forRow: bestDest.row, forCol: bestDest.col).origin
+                }
+                
+                // undo move
+                theChessBoard.board[source.row][source.col] = theChessBoard.board[dest.row][dest.col]
+                theChessBoard.board[dest.row][dest.col] = pieceTaken
+            }
+        }
+                
+        if bestNetScore > limit {
+            
+            move(piece: bestPiece, fromIndex: bestSource, toIndex: bestDest, toOrigin: bestOrigin)
+            
+            theChessBoard.vc.AIFeedBack = "AI: Made best move"
+            
+            // AI about to make move for Black so update the dispMove label with Black's move
+            theChessBoard.vc.dispMove.text = calcAlgebraicNotation(piece: bestPiece, fromIndex: bestSource, toIndex: bestDest, mode: "Normal")
+            
+            // for visual clarity turn black piece just moved to red and set
+            // ViewController variable "chessPieceToSetBackToBlack" to this chess piece
+            // so it can immediately be turned back to black when the player touches to screen
+            bestPiece.textColor = .red
+            theChessBoard.vc.chessPieceToSetBackToBlack = bestPiece
+            
+            
+            print("AI: BEST NET SCORE: \(bestNetScore)")
+            theChessBoard.vc.AIFeedBack = "AI: BEST NET SCORE: \(bestNetScore)"
+            return true
+        }
+        
+        
         return false
     }
     
     func didAttackUndefendedPiece() ->Bool {
+        
+        loopThatTraversesChessPieces: for attackingChessPiece in theChessBoard.vc.chessPieces {
+            
+            guard attackingChessPiece.color ==  #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)  else {
+                continue loopThatTraversesChessPieces
+            }
+            
+            guard let source = theChessBoard.getIndex(forChessPiece: attackingChessPiece) else {
+                continue loopThatTraversesChessPieces
+            }
+            
+            let possibleDestinations = getArrayOfPossibleMoves(forPiece: attackingChessPiece)
+            
+            searchForUndefendedWhitePieces: for attackedIndex in possibleDestinations {
+                guard let attackedChessPiece = theChessBoard.board[attackedIndex.row][attackedIndex.col] as? UIChessPiece else {
+                    continue searchForUndefendedWhitePieces
+                }
+                
+                for row in 0..<theChessBoard.ROWS {
+                    for col in 0..<theChessBoard.COLS {
+                        
+                        guard let defendingChessPiece = theChessBoard.board[row][col] as? UIChessPiece, defendingChessPiece.color == #colorLiteral(red: 0.9999960065, green: 1, blue: 1, alpha: 1) else {
+                            continue
+                        }
+                        
+                        let defendingIndex = BoardIndex(row: row, col: col)
+                        
+                        if isNormalMoveValid(forPiece: defendingChessPiece, fromIndex: defendingIndex, toIndex: attackedIndex, canAttackAllies: true) {
+                            continue searchForUndefendedWhitePieces
+                            
+                        }
+                    }
+                }
+                
+                // need to record the attacked piece for calcAlgebraicNotation
+                pieceToRemove = theChessBoard.board[attackedIndex.row][attackedIndex.col]
+                theChessBoard.vc.AIFeedBack = "AI: took undefended piece"
+                
+                // AI about to make move for Black so update the dispMove label with Black's move
+                theChessBoard.vc.dispMove.text = calcAlgebraicNotation(piece: attackingChessPiece, fromIndex: source, toIndex: attackedIndex, mode: "Normal")
+                
+                move(piece: attackingChessPiece, fromIndex: source, toIndex: attackedIndex, toOrigin: attackedChessPiece.frame.origin)
+                
+                // for visual clarity turn black piece just moved to red and set
+                // ViewController variable "chessPieceToSetBackToBlack" to this chess piece
+                // so it can immediately be turned back to black when the player touches to screen
+                attackingChessPiece.textColor = .red
+                theChessBoard.vc.chessPieceToSetBackToBlack = attackingChessPiece
+                
+                return true
+            }
+        }
+        
         return false
     }
     
@@ -295,7 +457,13 @@ class ChessGame: NSObject {
     // before allowing it to be considered by the chess engine.
     // two basic checks are done first: 1) moving the piece onto it's own square
     //                                  2) trying to attack one of it's own pieces
-    func isNormalMoveValid(forPiece piece: UIChessPiece, fromIndex source: BoardIndex, toIndex dest: BoardIndex) -> Bool {
+    
+    // optional parameter of canAttackAllies is set to false by default.  Any call to this function
+    // that sets this value to true will skip the guard statement that insures one color isn't
+    // attacking itself.  This is only used when the AI is making a move for black and the AI is
+    // testing all white pieces on the board to see if they are defended, or not.  To do this we
+    // allow white to attack white during the testing in didAttackUndefendedPiece(..)
+    func isNormalMoveValid(forPiece piece: UIChessPiece, fromIndex source: BoardIndex, toIndex dest: BoardIndex, canAttackAllies: Bool = false) -> Bool {
         
 
         // suppress the message if the AI is making moves since it tests many possibilities
@@ -310,17 +478,19 @@ class ChessGame: NSObject {
             return false
         }
  
-        // suppress the message if the AI is making moves since it tests many possibilities
-        // that generate the messages
-        guard !isAttackingAlliedPiece(sourceChessPiece: piece, destIndex: dest) else {
-            if isWhiteTurn || !theChessBoard.vc.isAgainstAI {
-                theChessBoard.vc.dispMove.text = "ATTACKING YOUR OWN PIECE"
-                AudioServicesPlayAlertSoundWithCompletion(SystemSoundID(kSystemSoundID_Vibrate)) { }
-            }
-                theChessBoard.vc.dispMove.textColor = isWhiteTurn ? #colorLiteral(red: 0.9999960065, green: 1, blue: 1, alpha: 1) : #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
-                print(theChessBoard.vc.dispMove.text!)
-                return false
+        if !canAttackAllies {
+            // suppress the message if the AI is making moves since it tests many possibilities
+            // that generate the messages
+            guard !isAttackingAlliedPiece(sourceChessPiece: piece, destIndex: dest) else {
+                if isWhiteTurn || !theChessBoard.vc.isAgainstAI {
+                    theChessBoard.vc.dispMove.text = "ATTACKING YOUR OWN PIECE"
+                    AudioServicesPlayAlertSoundWithCompletion(SystemSoundID(kSystemSoundID_Vibrate)) { }
                 }
+                    theChessBoard.vc.dispMove.textColor = isWhiteTurn ? #colorLiteral(red: 0.9999960065, green: 1, blue: 1, alpha: 1) : #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+                    print(theChessBoard.vc.dispMove.text!)
+                    return false
+                    }
+        }
 
         var pieceMovedNotPawn:Bool = true
         
@@ -1017,6 +1187,9 @@ class ChessGame: NSObject {
                 moveText! += " \(thisPiece ?? "")"
                 moveText! += captureMade ? "x" : ""
                 moveText! += "\(algebraicDestPosition ?? "")"
+                if theChessBoard.vc.AIFeedBack != "" {
+                    moveText! += "\n" + " " + theChessBoard.vc.AIFeedBack
+                }
                 if theChessBoard.vc.lblDisplayCheckOUTLET.text == "White is in check!" {
                     moveText! += "+"
                 }
@@ -1028,6 +1201,7 @@ class ChessGame: NSObject {
                 moveText! = moveText!.replacingOccurrences(of: "+", with: "#")
             }
             gameMoves.append(moveText!)
+            theChessBoard.vc.AIFeedBack = ""
         } else {
             firstHalfMove! = moveCount! < 10 ? " " : ""
             if self.castleNotation == "" {
