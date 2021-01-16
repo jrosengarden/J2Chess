@@ -20,7 +20,11 @@ class NotationViewController: UIViewController {
         // Do any additional setup after loading the view
         
         // load the textfield (txtGameMoves) with the game moves
-        txtGameMoves.text = hndParent?.myChessGame.gameMoves.joined(separator: "\n")
+        if hndParent!.AIFeedBackVisible.isOn {
+            txtGameMoves.text = hndParent?.myChessGame.gameMoves2.joined(separator: "\n")
+        } else {
+            txtGameMoves.text = hndParent?.myChessGame.gameMoves.joined(separator: "\n")
+        }
         
     }
     

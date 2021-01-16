@@ -20,6 +20,8 @@ class ChessGame: NSObject {
     
     var castleNotation:String = ""              // global variable to hold castling notation
     var gameMoves:[String] = []                 // global variable to retain all game moves
+    var gameMoves2:[String] = []                // global variable to retain all game moves
+                                                // with AI comments
     
     var checkMateCondition:Bool = false         // checkmate exists
 
@@ -1058,6 +1060,8 @@ class ChessGame: NSObject {
         var captureMade:Bool                        // true if capture being made false if not
         var moveText:String?                        // string containing std chess notation of
                                                     // both halfs of current move - returned to caller
+        var moveText2:String?                       // save as above but with
+                                                    // std chss notation & AI Feedback comments
         
         // set capture string to "x" if the target square was not empty (Dummy)
         // note:  pieceToRemove is a global variable for this class (ChessGame.swift)
@@ -1187,9 +1191,6 @@ class ChessGame: NSObject {
                 moveText! += " \(thisPiece ?? "")"
                 moveText! += captureMade ? "x" : ""
                 moveText! += "\(algebraicDestPosition ?? "")"
-                if theChessBoard.vc.AIFeedBack != "" && theChessBoard.vc.AIFeedBackVisible.isOn {
-                    moveText! += "\n" + " " + theChessBoard.vc.AIFeedBack
-                }
                 if theChessBoard.vc.lblDisplayCheckOUTLET.text == "White is in check!" {
                     moveText! += "+"
                 }
@@ -1200,7 +1201,13 @@ class ChessGame: NSObject {
             if checkMateCondition  {
                 moveText! = moveText!.replacingOccurrences(of: "+", with: "#")
             }
-            gameMoves.append(moveText!)
+            // copy moveText to moveText2 and append AI feed back
+            moveText2 = moveText! + "\n" + " " + theChessBoard.vc.AIFeedBack
+            
+            gameMoves.append(moveText!)         // append moveText to gameMoves[] array
+            gameMoves2.append(moveText2!)       // append moveText2 to gameMoves2[] array
+            
+            // clear out AI Feedback for next move
             theChessBoard.vc.AIFeedBack = ""
         } else {
             firstHalfMove! = moveCount! < 10 ? " " : ""
