@@ -14,6 +14,8 @@ class ViewController: UIViewController {
     @IBOutlet weak var lblDisplayCheckOUTLET: UILabel!
     @IBOutlet var panOUTLET: UIPanGestureRecognizer!
     @IBOutlet weak var dispMove: UILabel!
+    @IBOutlet weak var AIFeedBackVisible: UISwitch!
+    @IBOutlet weak var AIFeedBackLabel: UILabel!
     
     
 
@@ -44,9 +46,21 @@ class ViewController: UIViewController {
         myChessGame = ChessGame.init(viewController: self)
         
         self.navigationItem.rightBarButtonItem?.title = "Review Game" + " >"
+        
+        // make AIFeedBackVisible UISwitch smaller
+        AIFeedBackVisible.transform = CGAffineTransform(scaleX: 0.75, y: 0.75)
 
     }
     
+    @IBAction func AIFeedBackChanged(_ sender: Any) {
+        
+        if AIFeedBackVisible.isOn {
+            AIFeedBackLabel.text = "AI FeedBack On"
+        } else {
+            AIFeedBackLabel.text = "AI FeedBack Off"
+        }
+        
+    }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         

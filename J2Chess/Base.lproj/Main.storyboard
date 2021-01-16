@@ -423,6 +423,22 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="x1J-xu-K5z">
+                                <rect key="frame" x="16" y="44" width="49" height="31"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <rect key="contentStretch" x="0.0" y="0.0" width="0.75" height="1"/>
+                                <color key="onTintColor" red="0.38703942299999999" green="0.63422387840000005" blue="0.71366107459999995" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <connections>
+                                    <action selector="AIFeedBackChanged:" destination="BYZ-38-t0r" eventType="valueChanged" id="Fna-IF-20q"/>
+                                </connections>
+                            </switch>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="AI Feedback On" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="L3D-sa-IWX">
+                                <rect key="frame" x="69" y="49" width="153" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemGray4Color"/>
@@ -439,6 +455,8 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="AIFeedBackLabel" destination="L3D-sa-IWX" id="hLU-Lm-Z0i"/>
+                        <outlet property="AIFeedBackVisible" destination="x1J-xu-K5z" id="GsT-O7-t5F"/>
                         <outlet property="dispMove" destination="mqj-ry-SHM" id="Ev7-uS-a7x"/>
                         <outlet property="lblDisplayCheckOUTLET" destination="Qf9-k1-1t5" id="WRL-7d-GRT"/>
                         <outlet property="lblDisplayTurnOUTLET" destination="OJ1-5c-GnJ" id="Bue-QN-UxT"/>

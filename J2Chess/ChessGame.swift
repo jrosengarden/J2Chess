@@ -267,6 +267,7 @@ class ChessGame: NSObject {
             move(piece: bestPiece, fromIndex: bestSource, toIndex: bestDest, toOrigin: bestOrigin)
             
             theChessBoard.vc.AIFeedBack = "AI: Made best move"
+            theChessBoard.vc.AIFeedBack += "\n AI: Best Net Score: \(bestNetScore)"
             
             // AI about to make move for Black so update the dispMove label with Black's move
             theChessBoard.vc.dispMove.text = calcAlgebraicNotation(piece: bestPiece, fromIndex: bestSource, toIndex: bestDest, mode: "Normal")
@@ -279,7 +280,6 @@ class ChessGame: NSObject {
             
             
             print("AI: BEST NET SCORE: \(bestNetScore)")
-            theChessBoard.vc.AIFeedBack = "AI: BEST NET SCORE: \(bestNetScore)"
             return true
         }
         
@@ -1187,7 +1187,7 @@ class ChessGame: NSObject {
                 moveText! += " \(thisPiece ?? "")"
                 moveText! += captureMade ? "x" : ""
                 moveText! += "\(algebraicDestPosition ?? "")"
-                if theChessBoard.vc.AIFeedBack != "" {
+                if theChessBoard.vc.AIFeedBack != "" && theChessBoard.vc.AIFeedBackVisible.isOn {
                     moveText! += "\n" + " " + theChessBoard.vc.AIFeedBack
                 }
                 if theChessBoard.vc.lblDisplayCheckOUTLET.text == "White is in check!" {
