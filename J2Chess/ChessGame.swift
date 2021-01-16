@@ -143,6 +143,7 @@ class ChessGame: NSObject {
                 // update the NotationViewController with the last move
                 firstHalfMove! = firstHalfMove!.replacingOccurrences(of: "+", with: "#")
                 gameMoves.append(firstHalfMove!)
+                gameMoves2.append(firstHalfMove!)
                 
                 // hard exit due to checkmate
                 break
@@ -1232,6 +1233,7 @@ class ChessGame: NSObject {
                     firstHalfMove! = firstHalfMove!.replacingOccurrences(of: "+", with: "#")
                 }
                 gameMoves.append(firstHalfMove!)
+                gameMoves2.append(firstHalfMove!)
             }
 
         }

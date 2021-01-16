@@ -10,6 +10,8 @@ import UIKit
 class NotationViewController: UIViewController {
 
     @IBOutlet weak var txtGameMoves: UITextView!
+    @IBOutlet weak var AIFeedBack: UISwitch!
+    @IBOutlet weak var AIFeedBackLabel: UILabel!
     
     // handle back to the parent (calling) view controller
     var hndParent:ViewController?
@@ -19,16 +21,26 @@ class NotationViewController: UIViewController {
         
         // Do any additional setup after loading the view
         
+        // make AIFeedBackVisible UISwitch smaller
+        AIFeedBack.transform = CGAffineTransform(scaleX: 0.75, y: 0.75)
+        
         // load the textfield (txtGameMoves) with the game moves
-        if hndParent!.AIFeedBackVisible.isOn {
+        AIFeedBackChanged(self)
+        
+    }
+    
+    @IBAction func AIFeedBackChanged(_ sender: Any) {
+        
+        if AIFeedBack.isOn {
+            AIFeedBackLabel.text = "AI FeedBack is On"
             txtGameMoves.text = hndParent?.myChessGame.gameMoves2.joined(separator: "\n")
         } else {
+            AIFeedBackLabel.text = "AI FeedBack is Off"
             txtGameMoves.text = hndParent?.myChessGame.gameMoves.joined(separator: "\n")
         }
         
     }
     
-
     /*
     // MARK: - Navigation
 
