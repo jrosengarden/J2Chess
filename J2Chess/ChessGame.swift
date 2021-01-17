@@ -202,12 +202,24 @@ class ChessGame: NSObject {
                 
                 let dest = BoardIndex(row: row, col: col)
                 
+                
+                // only increase locationScore if dest has a white chess piece on it
+                // and black has a legal move to capture that piece
+                // chess piece on dest guaranteed to be white since canAttackAllies set to false
+                // locationScore is increased by value of chess piece on dest
+                // (Pawn=1, Knight=2, Bishop=3, Rook=4, Queen=5, King=6)
+                // need to divide .tag value by 10 to drop off the 2nd digit (which is the color code)
                 if theChessBoard.board[row][col] is UIChessPiece {
-                    if isNormalMoveValid(forPiece: aChessPiece, fromIndex: source, toIndex: dest, canAttackAllies: true) {
-                        locationScore += 1
+                    if isNormalMoveValid(forPiece: aChessPiece, fromIndex: source, toIndex: dest, canAttackAllies: false) {
+                        locationScore += Int((theChessBoard.board[row][col] as? UIChessPiece)!.tag) / 10
                     }
                 }
             }
+        }
+        // increase locationScore +2 if it wasn't 0 to account
+        // for a Pawn only being worth 1
+        if locationScore > 0 {
+            locationScore += 2
         }
         return locationScore
     }
