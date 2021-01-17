@@ -500,10 +500,10 @@ class ChessGame: NSObject {
                     theChessBoard.vc.dispMove.text = "ATTACKING YOUR OWN PIECE"
                     AudioServicesPlayAlertSoundWithCompletion(SystemSoundID(kSystemSoundID_Vibrate)) { }
                 }
-                    theChessBoard.vc.dispMove.textColor = isWhiteTurn ? #colorLiteral(red: 0.9999960065, green: 1, blue: 1, alpha: 1) : #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
-                    print(theChessBoard.vc.dispMove.text!)
-                    return false
-                    }
+                theChessBoard.vc.dispMove.textColor = isWhiteTurn ? #colorLiteral(red: 0.9999960065, green: 1, blue: 1, alpha: 1) : #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+                print(theChessBoard.vc.dispMove.text!)
+                return false
+            }
         }
 
         var pieceMovedNotPawn:Bool = true
