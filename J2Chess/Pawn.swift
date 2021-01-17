@@ -14,11 +14,17 @@ class Pawn: UIChessPiece {
     init(frame:CGRect, color: UIColor, vc: ViewController) {
         super.init(frame: frame)
         
+        // tag code:  1st Position = type of piece (1:Pawn, 2:Knight, 3:Bishop, 4:Rook, 5:Queen, 6:King)
+        //            2nd Position = color of piece (0:White, 1:Black)
+        
         if color == #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1) {
             self.text = "♟︎"
+            self.tag = 11
         } else {
             self.text = "♙"
+            self.tag = 10
         }
+        
         
         self.isOpaque = false
         self.textColor = color

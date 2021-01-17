@@ -209,7 +209,6 @@ class ChessGame: NSObject {
                 }
             }
         }
-        
         return locationScore
     }
     
