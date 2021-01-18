@@ -14,4 +14,5 @@ import UIKit
 
 class AppSettings{
     var AIFeedBackVisible:Bool?
+    var AIScoreLimit:Int?
 }

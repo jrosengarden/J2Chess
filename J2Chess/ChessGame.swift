@@ -154,7 +154,7 @@ class ChessGame: NSObject {
             theChessBoard.board[randDestIndex.row][randDestIndex.col] = pieceTaken
             
             // try best move if any good one
-            if didBestMoveForAI(forScoreOver: 2) {
+            if didBestMoveForAI(forScoreOver: appSettings.AIScoreLimit!) {
                 print("AI: DID MAKE BEST MOVE")
                 
                 return
@@ -216,10 +216,10 @@ class ChessGame: NSObject {
                 }
             }
         }
-        // increase locationScore +2 if it wasn't 0 to account
+        // increase locationScore by appSettings.AIScoreLimit if it wasn't 0 to account
         // for a Pawn only being worth 1
         if locationScore > 0 {
-            locationScore += 2
+            locationScore += appSettings.AIScoreLimit!
         }
         return locationScore
     }

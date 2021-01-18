@@ -90,8 +90,8 @@
 			isa = PBXGroup;
 			children = (
 				884F67952597E82400D8A286 /* J2Chess.entitlements */,
-				881BD19625657F5E00E6B393 /* Piece.swift */,
 				884516FB25B522B800FD9019 /* AppSettings.swift */,
+				881BD19625657F5E00E6B393 /* Piece.swift */,
 				881BD19925657F7000E6B393 /* Pawn.swift */,
 				881BD19C25657F7B00E6B393 /* Knight.swift */,
 				881BD19F25657F8300E6B393 /* Rook.swift */,

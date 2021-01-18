@@ -44,6 +44,7 @@ class StartScreen: UIViewController {
         
         // default setting of UISwitch (AIFeedBack) on NotationViewController
         appSettings.AIFeedBackVisible = false
+        appSettings.AIScoreLimit = 3
         
     }
     
