@@ -8,16 +8,22 @@
 import UIKit
 import AudioToolbox
 
+
+// setup app settings here
+// TODO: replace w/persistent data store eventually
+class AppSettings{
+    var AIFeedBackVisible:Bool?                 
+}
+
+// create instance of AppSettings that is available globally
+let appSettings = AppSettings()
+
 class ViewController: UIViewController {
     
     @IBOutlet weak var lblDisplayTurnOUTLET: UILabel!
     @IBOutlet weak var lblDisplayCheckOUTLET: UILabel!
     @IBOutlet var panOUTLET: UIPanGestureRecognizer!
     @IBOutlet weak var dispMove: UILabel!
-    
-    
-
-    
     
     var pieceDragged: UIChessPiece!
     var sourceOrigin: CGPoint!

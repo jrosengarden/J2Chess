@@ -24,6 +24,13 @@ class NotationViewController: UIViewController {
         // make AIFeedBackVisible UISwitch smaller
         AIFeedBack.transform = CGAffineTransform(scaleX: 0.75, y: 0.75)
         
+        // set UISwitch position
+        if appSettings.AIFeedBackVisible == true {
+            AIFeedBack.isOn = true
+        } else {
+            AIFeedBack.isOn = false
+        }
+        
         // load the textfield (txtGameMoves) with the game moves
         AIFeedBackChanged(self)
         
@@ -34,9 +41,11 @@ class NotationViewController: UIViewController {
         if AIFeedBack.isOn {
             AIFeedBackLabel.text = "AI FeedBack is On"
             txtGameMoves.text = hndParent?.myChessGame.gameMoves2.joined(separator: "\n")
+            appSettings.AIFeedBackVisible = true
         } else {
             AIFeedBackLabel.text = "AI FeedBack is Off"
             txtGameMoves.text = hndParent?.myChessGame.gameMoves.joined(separator: "\n")
+            appSettings.AIFeedBackVisible = false
         }
         
     }

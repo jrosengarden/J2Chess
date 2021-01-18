@@ -42,6 +42,9 @@ class StartScreen: UIViewController {
             destVC.isAgainstAI = false
         }
         
+        // default setting of UISwitch (AIFeedBack) on NotationViewController
+        appSettings.AIFeedBackVisible = false
+        
     }
     
     // this seque allows return to start screen by naming it's identified as "backToMainMenu"
