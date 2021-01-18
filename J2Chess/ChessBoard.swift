@@ -144,5 +144,6 @@ class ChessBoard: NSObject {
                 }
             }
         }
+        print("Board Setup")
     }
 }
