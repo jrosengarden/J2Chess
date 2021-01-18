@@ -16,17 +16,19 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="J2Chess" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="l9B-PF-yJh">
-                                <rect key="frame" x="16" y="66" width="343" height="72"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="J2Chess" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="l9B-PF-yJh">
+                                <rect key="frame" x="16" y="66" width="343" height="51"/>
                                 <fontDescription key="fontDescription" name="Futura-CondensedExtraBold" family="Futura" pointSize="40"/>
                                 <color key="textColor" red="0.38703942299999999" green="0.63422387840000005" blue="0.71366107459999995" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SSL-2n-pI3">
-                                <rect key="frame" x="16" y="205" width="343" height="83"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SSL-2n-pI3">
+                                <rect key="frame" x="16" y="197" width="343" height="91"/>
                                 <color key="backgroundColor" red="0.38703942299999999" green="0.63422387840000005" blue="0.71366107459999995" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="91" id="Stf-H0-n0u"/>
+                                    <constraint firstAttribute="width" constant="343" id="ytX-yg-PL1"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" name="Futura-Bold" family="Futura" pointSize="35"/>
                                 <color key="tintColor" red="0.28115926249670703" green="0.28019694286481706" blue="0.86267900470000003" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <state key="normal" title="vs iPhone">
@@ -36,19 +38,19 @@
                                     <segue destination="BYZ-38-t0r" kind="show" identifier="singleplayer" id="fmP-J0-80Y"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aOx-uL-4nH">
-                                <rect key="frame" x="16" y="318" width="343" height="83"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="By: Jeff Rosengarden" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0RD-Bo-PLB">
+                                <rect key="frame" x="23" y="124" width="329" height="21"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                <color key="textColor" red="0.38703942299999999" green="0.63422387840000005" blue="0.71366107459999995" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FkR-WG-MtY">
+                                <rect key="frame" x="16" y="315" width="343" height="91"/>
                                 <color key="backgroundColor" red="0.38703942299999999" green="0.63422387840000005" blue="0.71366107459999995" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="35"/>
-                                <state key="normal" title="vs Human">
-                                    <color key="titleColor" red="0.53674411769999997" green="0.78325241800000001" blue="0.86267900470000003" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                </state>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FkR-WG-MtY">
-                                <rect key="frame" x="16" y="306" width="343" height="83"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="0.38703942299999999" green="0.63422387840000005" blue="0.71366107459999995" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="343" id="CY4-Rv-WJZ"/>
+                                    <constraint firstAttribute="height" constant="91" id="TK5-XQ-aIk"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" name="Futura-Bold" family="Futura" pointSize="35"/>
                                 <state key="normal" title="vs Human">
                                     <color key="titleColor" red="0.53674411769999997" green="0.78325241800000001" blue="0.86267900470000003" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
@@ -57,16 +59,23 @@
                                     <segue destination="BYZ-38-t0r" kind="show" identifier="multiplayer" id="Rzd-VV-scX"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="By: Jeff Rosengarden" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0RD-Bo-PLB">
-                                <rect key="frame" x="23" y="124" width="329" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
-                                <color key="textColor" red="0.38703942299999999" green="0.63422387840000005" blue="0.71366107459999995" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="QZY-VZ-yBo"/>
                         <color key="backgroundColor" systemColor="systemGray4Color"/>
+                        <constraints>
+                            <constraint firstItem="SSL-2n-pI3" firstAttribute="top" secondItem="oba-aV-74K" secondAttribute="topMargin" constant="153" id="1SB-Ok-Vc0"/>
+                            <constraint firstItem="0RD-Bo-PLB" firstAttribute="leading" secondItem="QZY-VZ-yBo" secondAttribute="leading" constant="23" id="Avl-zJ-ke8"/>
+                            <constraint firstItem="FkR-WG-MtY" firstAttribute="top" secondItem="oba-aV-74K" secondAttribute="topMargin" constant="271" id="Bsw-4f-zPk"/>
+                            <constraint firstItem="QZY-VZ-yBo" firstAttribute="trailing" secondItem="l9B-PF-yJh" secondAttribute="trailing" constant="16" id="Esb-SR-gaT"/>
+                            <constraint firstItem="QZY-VZ-yBo" firstAttribute="trailing" secondItem="0RD-Bo-PLB" secondAttribute="trailing" constant="23" id="FPc-f0-idm"/>
+                            <constraint firstItem="l9B-PF-yJh" firstAttribute="leading" secondItem="QZY-VZ-yBo" secondAttribute="leading" constant="16" id="JAh-Or-Oib"/>
+                            <constraint firstItem="QZY-VZ-yBo" firstAttribute="trailing" secondItem="FkR-WG-MtY" secondAttribute="trailing" constant="16" id="KyW-Ta-m0W"/>
+                            <constraint firstItem="l9B-PF-yJh" firstAttribute="top" secondItem="oba-aV-74K" secondAttribute="topMargin" constant="22" id="SFq-i1-ruA"/>
+                            <constraint firstItem="FkR-WG-MtY" firstAttribute="leading" secondItem="QZY-VZ-yBo" secondAttribute="leading" constant="16" id="ZgO-de-jH0"/>
+                            <constraint firstItem="0RD-Bo-PLB" firstAttribute="top" secondItem="l9B-PF-yJh" secondAttribute="bottom" constant="7" id="Zmx-cB-aus"/>
+                            <constraint firstItem="QZY-VZ-yBo" firstAttribute="trailing" secondItem="SSL-2n-pI3" secondAttribute="trailing" constant="16" id="jQY-AH-R1H"/>
+                            <constraint firstItem="SSL-2n-pI3" firstAttribute="leading" secondItem="QZY-VZ-yBo" secondAttribute="leading" constant="16" id="wVt-4e-4m9"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="ohP-s9-9fI"/>
                 </viewController>
