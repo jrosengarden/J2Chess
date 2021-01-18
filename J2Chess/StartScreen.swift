@@ -42,8 +42,12 @@ class StartScreen: UIViewController {
             destVC.isAgainstAI = false
         }
         
+        // app-wide settings in appSettings
+        
         // default setting of UISwitch (AIFeedBack) on NotationViewController
         appSettings.AIFeedBackVisible = false
+        
+        // default setting for AIScoreLimit (for calculating best move scores)
         appSettings.AIScoreLimit = 3
         
     }
