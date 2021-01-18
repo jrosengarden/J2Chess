@@ -172,9 +172,10 @@ class ChessGame: NSObject {
                     theChessBoard.vc.AIFeedBack = "AI: Escaped Check"
                 }
                 
+                move(piece: chessPieceToMove, fromIndex: sourceIndex, toIndex: randDestIndex, toOrigin: destOrigin)
+                
                 // AI made the move for Black so update the dispMove label with Black's move
                 theChessBoard.vc.dispMove.text = calcAlgebraicNotation(piece: chessPieceToMove, fromIndex: sourceIndex, toIndex: randDestIndex, mode: "Normal")
-                move(piece: chessPieceToMove, fromIndex: sourceIndex, toIndex: randDestIndex, toOrigin: destOrigin)
                 
                 // for visual clarity turn black piece just moved to red and set
                 // ViewController variable "chessPieceToSetBackToBlack" to this chess piece
@@ -279,11 +280,10 @@ class ChessGame: NSObject {
         if bestNetScore > limit {
             
             move(piece: bestPiece, fromIndex: bestSource, toIndex: bestDest, toOrigin: bestOrigin)
-            
             theChessBoard.vc.AIFeedBack = "AI: Made best move"
             theChessBoard.vc.AIFeedBack += "\n AI: Best Net Score: \(bestNetScore)"
             
-            // AI about to make move for Black so update the dispMove label with Black's move
+            // AI made the move for Black so update the dispMove label with Black's move
             theChessBoard.vc.dispMove.text = calcAlgebraicNotation(piece: bestPiece, fromIndex: bestSource, toIndex: bestDest, mode: "Normal")
             
             // for visual clarity turn black piece just moved to red and set
@@ -340,15 +340,15 @@ class ChessGame: NSObject {
                 pieceToRemove = theChessBoard.board[attackedIndex.row][attackedIndex.col]
                 theChessBoard.vc.AIFeedBack = "AI: took undefended piece"
                 
-                // AI about to make move for Black so update the dispMove label with Black's move
-                theChessBoard.vc.dispMove.text = calcAlgebraicNotation(piece: attackingChessPiece, fromIndex: source, toIndex: attackedIndex, mode: "Normal")
-                
                 move(piece: attackingChessPiece, fromIndex: source, toIndex: attackedIndex, toOrigin: attackedChessPiece.frame.origin)
+                
+                // AI made the move for Black so update the dispMove label with Black's move
+                theChessBoard.vc.dispMove.text = calcAlgebraicNotation(piece: attackingChessPiece, fromIndex: source, toIndex: attackedIndex, mode: "Normal")
                 
                 // for visual clarity turn black piece just moved to red and set
                 // ViewController variable "chessPieceToSetBackToBlack" to this chess piece
                 // so it can immediately be turned back to black when the player touches to screen
-                attackingChessPiece.textColor = .red
+                //attackingChessPiece.textColor = .red
                 theChessBoard.vc.chessPieceToSetBackToBlack = attackingChessPiece
                 
                 return true
@@ -389,7 +389,7 @@ class ChessGame: NSObject {
                     
                     let chessPieceIndex = BoardIndex(row: row, col: col)
                     
-                    if chessPiece.color == #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1) {
+                    if chessPiece.color == #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1) || chessPiece.color == .red {
                         if isNormalMoveValid(forPiece: chessPiece, fromIndex: chessPieceIndex, toIndex: whiteKingIndex) {
                             return "White"
                         }
@@ -450,7 +450,6 @@ class ChessGame: NSObject {
             theChessBoard.vc.dispMove.text = "MOVE IS NOT ON BOARD"
             AudioServicesPlayAlertSoundWithCompletion(SystemSoundID(kSystemSoundID_Vibrate)) { }
             theChessBoard.vc.dispMove.textColor = isWhiteTurn ? #colorLiteral(red: 0.9999960065, green: 1, blue: 1, alpha: 1) : #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
-            print(theChessBoard.vc.dispMove.text!)
             return false
         }
         
@@ -459,7 +458,6 @@ class ChessGame: NSObject {
             theChessBoard.vc.dispMove.text! += isWhiteTurn ? " BLACK'S TURN" : " WHITE'S TURN"
             theChessBoard.vc.dispMove.textColor = isWhiteTurn ? #colorLiteral(red: 0.9999960065, green: 1, blue: 1, alpha: 1) : #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
             AudioServicesPlayAlertSoundWithCompletion(SystemSoundID(kSystemSoundID_Vibrate)) { }
-            print(theChessBoard.vc.dispMove.text!)
             return false
         }
                
@@ -488,7 +486,6 @@ class ChessGame: NSObject {
                 AudioServicesPlayAlertSoundWithCompletion(SystemSoundID(kSystemSoundID_Vibrate)) { }
             }
             theChessBoard.vc.dispMove.textColor = isWhiteTurn ? #colorLiteral(red: 0.9999960065, green: 1, blue: 1, alpha: 1) : #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
-            print (theChessBoard.vc.dispMove.text!)
             return false
         }
  
@@ -501,7 +498,6 @@ class ChessGame: NSObject {
                     AudioServicesPlayAlertSoundWithCompletion(SystemSoundID(kSystemSoundID_Vibrate)) { }
                 }
                 theChessBoard.vc.dispMove.textColor = isWhiteTurn ? #colorLiteral(red: 0.9999960065, green: 1, blue: 1, alpha: 1) : #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
-                print(theChessBoard.vc.dispMove.text!)
                 return false
             }
         }
@@ -1203,7 +1199,7 @@ class ChessGame: NSObject {
                 moveText! += " \(thisPiece ?? "")"
                 moveText! += captureMade ? "x" : ""
                 moveText! += "\(algebraicDestPosition ?? "")"
-                if theChessBoard.vc.lblDisplayCheckOUTLET.text == "White is in check!" {
+                if getPlayerChecked() == "White" {
                     moveText! += "+"
                 }
             } else {
@@ -1227,7 +1223,7 @@ class ChessGame: NSObject {
                 firstHalfMove! += "\(moveCount ?? 0): \(thisPiece ?? "")"
                 firstHalfMove! += captureMade ? "x" : ""
                 firstHalfMove! += "\(algebraicDestPosition ?? "")"
-                if theChessBoard.vc.lblDisplayCheckOUTLET.text == "Black is in check!" {
+                if getPlayerChecked() == "Black" {
                     firstHalfMove! += "+"
                 }
             } else {
