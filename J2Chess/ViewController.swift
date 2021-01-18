@@ -8,13 +8,6 @@
 import UIKit
 import AudioToolbox
 
-
-// setup app settings here
-// TODO: replace w/persistent data store eventually
-class AppSettings{
-    var AIFeedBackVisible:Bool?                 
-}
-
 // create instance of AppSettings that is available globally
 let appSettings = AppSettings()
 
