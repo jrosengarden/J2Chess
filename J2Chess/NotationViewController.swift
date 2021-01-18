@@ -24,8 +24,16 @@ class NotationViewController: UIViewController {
         // make AIFeedBackVisible UISwitch smaller
         AIFeedBack.transform = CGAffineTransform(scaleX: 0.75, y: 0.75)
         
+        if hndParent?.isAgainstAI == true {
+            AIFeedBack.isHidden = false
+            AIFeedBackLabel.isHidden = false
+        } else {
+            AIFeedBack.isHidden = true
+            AIFeedBackLabel.isHidden = true
+        }
+        
         // set UISwitch position
-        if appSettings.AIFeedBackVisible == true {
+        if appSettings.AIFeedBackVisible == true{
             AIFeedBack.isOn = true
         } else {
             AIFeedBack.isOn = false
