@@ -172,27 +172,34 @@ class ChessGame: NSObject {
                     theChessBoard.vc.AIFeedBack = "AI: Escaped Check"
                 }
                 
-                move(piece: chessPieceToMove, fromIndex: sourceIndex, toIndex: randDestIndex, toOrigin: destOrigin)
+                makeAIMoveAndUpdateNotation(chessPieceToMove: chessPieceToMove, sourceIndex: sourceIndex, destIndex: randDestIndex, destOrigin: destOrigin)
                 
-                // AI made a move - see if a pawn promotion should occur
-                if theChessBoard.vc.shouldPromotePawn() {
-                    theChessBoard.vc.promote(pawn: getPawnToBePromoted()!, into: "Queen")
-                }
-                
-                // AI made the move for Black so update the dispMove label with Black's move
-                theChessBoard.vc.dispMove.text = calcAlgebraicNotation(piece: chessPieceToMove, fromIndex: sourceIndex, toIndex: randDestIndex, mode: "Normal")
-                
-                // for visual clarity turn black piece just moved to red and set
-                // ViewController variable "chessPieceToSetBackToBlack" to this chess piece
-                // so it can immediately be turned back to black when the player touches to screen
-                chessPieceToMove.textColor = .red
-                theChessBoard.vc.chessPieceToSetBackToBlack = chessPieceToMove
                 
                 moveFound = true
             } else {
                 moveFound = false
             }
         }
+    }
+    
+    func makeAIMoveAndUpdateNotation(chessPieceToMove: UIChessPiece, sourceIndex: BoardIndex, destIndex: BoardIndex, destOrigin: CGPoint ) {
+        
+        move(piece: chessPieceToMove, fromIndex: sourceIndex, toIndex: destIndex, toOrigin: destOrigin)
+        
+        // AI made a move - see if a pawn promotion should occur
+        if theChessBoard.vc.shouldPromotePawn() {
+            theChessBoard.vc.promote(pawn: getPawnToBePromoted()!, into: "Queen")
+        }
+        
+        // AI made the move for Black so update the dispMove label with Black's move
+        theChessBoard.vc.dispMove.text = calcAlgebraicNotation(piece: chessPieceToMove, fromIndex: sourceIndex, toIndex: destIndex, mode: "Normal")
+        
+        // for visual clarity turn black piece just moved to red and set
+        // ViewController variable "chessPieceToSetBackToBlack" to this chess piece
+        // so it can immediately be turned back to black when the player touches to screen
+        chessPieceToMove.textColor = .red
+        theChessBoard.vc.chessPieceToSetBackToBlack = chessPieceToMove
+        
     }
     
     func getScoreForLocation(ofPiece aChessPiece: UIChessPiece) -> Int {
@@ -284,24 +291,7 @@ class ChessGame: NSObject {
                 
         if bestNetScore > limit {
             
-            move(piece: bestPiece, fromIndex: bestSource, toIndex: bestDest, toOrigin: bestOrigin)
-            theChessBoard.vc.AIFeedBack = "AI: Made best move"
-            theChessBoard.vc.AIFeedBack += "\n AI: Best Net Score: \(bestNetScore)"
-            
-            // AI made a move - see if a pawn promotion should occur
-            if theChessBoard.vc.shouldPromotePawn() {
-                theChessBoard.vc.promote(pawn: getPawnToBePromoted()!, into: "Queen")
-            }
-            
-            // AI made the move for Black so update the dispMove label with Black's move
-            theChessBoard.vc.dispMove.text = calcAlgebraicNotation(piece: bestPiece, fromIndex: bestSource, toIndex: bestDest, mode: "Normal")
-            
-            // for visual clarity turn black piece just moved to red and set
-            // ViewController variable "chessPieceToSetBackToBlack" to this chess piece
-            // so it can immediately be turned back to black when the player touches to screen
-            bestPiece.textColor = .red
-            theChessBoard.vc.chessPieceToSetBackToBlack = bestPiece
-            
+            makeAIMoveAndUpdateNotation(chessPieceToMove: bestPiece, sourceIndex: bestSource, destIndex: bestDest, destOrigin: bestOrigin)
             
             print("AI: BEST NET SCORE: \(bestNetScore)")
             return true
@@ -350,21 +340,7 @@ class ChessGame: NSObject {
                 pieceToRemove = theChessBoard.board[attackedIndex.row][attackedIndex.col]
                 theChessBoard.vc.AIFeedBack = "AI: took undefended piece"
                 
-                move(piece: attackingChessPiece, fromIndex: source, toIndex: attackedIndex, toOrigin: attackedChessPiece.frame.origin)
-                
-                // AI made a move - see if a pawn promotion should occur
-                if theChessBoard.vc.shouldPromotePawn() {
-                    theChessBoard.vc.promote(pawn: getPawnToBePromoted()!, into: "Queen")
-                }
-                
-                // AI made the move for Black so update the dispMove label with Black's move
-                theChessBoard.vc.dispMove.text = calcAlgebraicNotation(piece: attackingChessPiece, fromIndex: source, toIndex: attackedIndex, mode: "Normal")
-                
-                // for visual clarity turn black piece just moved to red and set
-                // ViewController variable "chessPieceToSetBackToBlack" to this chess piece
-                // so it can immediately be turned back to black when the player touches to screen
-                //attackingChessPiece.textColor = .red
-                theChessBoard.vc.chessPieceToSetBackToBlack = attackingChessPiece
+                makeAIMoveAndUpdateNotation(chessPieceToMove: attackingChessPiece, sourceIndex: source, destIndex: attackedIndex, destOrigin: attackedChessPiece.frame.origin)
                 
                 return true
             }
