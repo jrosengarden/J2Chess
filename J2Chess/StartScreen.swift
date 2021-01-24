@@ -50,6 +50,10 @@ class StartScreen: UIViewController {
         // default setting for AIScoreLimit (for calculating best move scores)
         appSettings.AIScoreLimit = 3
         
+        // default setting for promotionType (for displaying promotion on notation view)
+        // should be set to "=" or "()"
+        appSettings.promotionStyle = "="
+        
     }
     
     // this seque allows return to start screen by naming it's identified as "backToMainMenu"

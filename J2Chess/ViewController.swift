@@ -30,6 +30,7 @@ class ViewController: UIViewController {
     var whitePawnForEnPassant:String = ""
     var blackPawnForEnPassant:String = ""
     var AIFeedBack:String = ""
+    var promotionType:String = ""
     
     // set in StartScreen.swift class based on which button was pressed
     // if playing computer set to true, if playing another human set to false
@@ -176,6 +177,7 @@ class ViewController: UIViewController {
         // make AI move, if necessary
         if isAgainstAI == true && !myChessGame.isWhiteTurn {
             
+            
             // reset pieceToRemove (needed for calcAlgebraicNotation)
             myChessGame.pieceToRemove = Dummy()
             
@@ -187,9 +189,12 @@ class ViewController: UIViewController {
                 return
             }
             
+            /* following redacted due to changes made to ChessGame.swift
             if shouldPromotePawn() {
                 promote(pawn: myChessGame.getPawnToBePromoted()!, into: "Queen")
             }
+            */
+            
             if myChessGame.getPlayerChecked() != "Black" {
                 displayCheck()
             }
@@ -225,6 +230,8 @@ class ViewController: UIViewController {
         default:
             break
         }
+        
+        promotionType = pieceName
     }
     
     func promptForPawnPromotion() {

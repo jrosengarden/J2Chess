@@ -174,6 +174,11 @@ class ChessGame: NSObject {
                 
                 move(piece: chessPieceToMove, fromIndex: sourceIndex, toIndex: randDestIndex, toOrigin: destOrigin)
                 
+                // AI made a move - see if a pawn promotion should occur
+                if theChessBoard.vc.shouldPromotePawn() {
+                    theChessBoard.vc.promote(pawn: getPawnToBePromoted()!, into: "Queen")
+                }
+                
                 // AI made the move for Black so update the dispMove label with Black's move
                 theChessBoard.vc.dispMove.text = calcAlgebraicNotation(piece: chessPieceToMove, fromIndex: sourceIndex, toIndex: randDestIndex, mode: "Normal")
                 
@@ -283,6 +288,11 @@ class ChessGame: NSObject {
             theChessBoard.vc.AIFeedBack = "AI: Made best move"
             theChessBoard.vc.AIFeedBack += "\n AI: Best Net Score: \(bestNetScore)"
             
+            // AI made a move - see if a pawn promotion should occur
+            if theChessBoard.vc.shouldPromotePawn() {
+                theChessBoard.vc.promote(pawn: getPawnToBePromoted()!, into: "Queen")
+            }
+            
             // AI made the move for Black so update the dispMove label with Black's move
             theChessBoard.vc.dispMove.text = calcAlgebraicNotation(piece: bestPiece, fromIndex: bestSource, toIndex: bestDest, mode: "Normal")
             
@@ -341,6 +351,11 @@ class ChessGame: NSObject {
                 theChessBoard.vc.AIFeedBack = "AI: took undefended piece"
                 
                 move(piece: attackingChessPiece, fromIndex: source, toIndex: attackedIndex, toOrigin: attackedChessPiece.frame.origin)
+                
+                // AI made a move - see if a pawn promotion should occur
+                if theChessBoard.vc.shouldPromotePawn() {
+                    theChessBoard.vc.promote(pawn: getPawnToBePromoted()!, into: "Queen")
+                }
                 
                 // AI made the move for Black so update the dispMove label with Black's move
                 theChessBoard.vc.dispMove.text = calcAlgebraicNotation(piece: attackingChessPiece, fromIndex: source, toIndex: attackedIndex, mode: "Normal")
@@ -1245,6 +1260,20 @@ class ChessGame: NSObject {
                 moveText! += " " + self.castleNotation
                 self.castleNotation = ""
             }
+            if theChessBoard.vc.promotionType != "" {
+                switch appSettings.promotionStyle {
+                case "()":
+                    moveText! += "(z)"
+                default:
+                    moveText! += "=z"
+                }
+                if theChessBoard.vc.promotionType.prefix(1) == "K" {
+                    moveText! = moveText!.replacingOccurrences(of: "z", with: "N")
+                    //moveText! += "=" + "N"
+                } else {
+                    moveText! = moveText!.replacingOccurrences(of: "z", with: theChessBoard.vc.promotionType.prefix(1))  
+                }
+            }
             if checkMateCondition  {
                 moveText! = moveText!.replacingOccurrences(of: "+", with: "#")
             }
@@ -1269,6 +1298,20 @@ class ChessGame: NSObject {
                 firstHalfMove! += "\(moveCount ?? 0): " + self.castleNotation + " "
                 self.castleNotation = ""
             }
+            if theChessBoard.vc.promotionType != "" {
+                switch appSettings.promotionStyle {
+                case "()":
+                    firstHalfMove! += "(z)"
+                default:
+                    firstHalfMove! += "=z"
+                }
+                if theChessBoard.vc.promotionType.prefix(1) == "K" {
+                    firstHalfMove! = firstHalfMove!.replacingOccurrences(of: "z", with: "N")
+                    //moveText! += "=" + "N"
+                } else {
+                    firstHalfMove! = firstHalfMove!.replacingOccurrences(of: "z", with: theChessBoard.vc.promotionType.prefix(1))
+                }
+            }
             while firstHalfMove!.count < 10 {
                 firstHalfMove! += " "
             }
@@ -1283,6 +1326,8 @@ class ChessGame: NSObject {
             }
 
         }
+        // reset pawn promotionType
+        theChessBoard.vc.promotionType = ""
         
         return !(isWhiteTurn) ? moveText! : ""
     }
