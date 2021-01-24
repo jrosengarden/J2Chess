@@ -1100,7 +1100,54 @@ class ChessGame: NSObject {
             thisPiece = "K"
         }
         
-
+        // if another piece of the same type can move to
+        // the same square need to differentiate piece
+        // being moved notation in the following order of preference:
+        // 1. add the file (col) of departure (if they differ)
+        // 2. add the rank (row) of the departure (if files are same but ranks are different)
+        // 3. add both the rank & file if neither, on it's own, can clearly differentiate (rare)
+        // result is stored in addToNotation and then used further down this method
+        var addToNotation:String = ""
+        if !(chessPieceToMove is Pawn) && !(chessPieceToMove is King) {
+            for row in 0..<theChessBoard.ROWS {
+                for col in 0..<theChessBoard.COLS {
+                    if let chessPiece = theChessBoard.board[row][col] as? UIChessPiece {
+                        if chessPiece.color == chessPieceToMove.color && chessPiece.tag == chessPieceToMove.tag {
+                            let chessPieceIndex = BoardIndex(row: row, col: col)
+                            
+                            // simulate move by removing the attacking piece at the destination
+                            // and putting back the piece removed at the destination
+                            let pieceTaken = theChessBoard.board[destIndex.row][destIndex.col]
+                            if captureMade {
+                                theChessBoard.board[destIndex.row][destIndex.col] = (pieceToRemove as? UIChessPiece)!
+                            } else {
+                                theChessBoard.board[destIndex.row][destIndex.col] = Dummy()
+                            }
+                            
+                            // see if piece of same type can legally reach the same square
+                            if isNormalMoveValid(forPiece: chessPiece, fromIndex: chessPieceIndex, toIndex: destIndex) {
+                                if chessPieceIndex.row == destIndex.row {
+                                    addToNotation += "R"
+                                }
+                                if chessPieceIndex.col == destIndex.col {
+                                    if chessPieceIndex.col != sourceIndex.col {
+                                        addToNotation += "R"
+                                    } else {
+                                        addToNotation += "C"
+                                    }
+                                }
+                            }
+                            
+                            // undo move by putting back the attacking piece at the destination
+                            theChessBoard.board[destIndex.row][destIndex.col] = pieceTaken
+                            
+                            
+                        }
+                    }
+                }
+            }
+        }
+               
         // convert sourceIndex.row to algebraic notation value
         switch sourceIndex.row {
         case 7:
@@ -1121,25 +1168,25 @@ class ChessGame: NSObject {
             conversion = 8
         }
         
-        // set final source position to algebraic notation
-        switch sourceIndex.col {
-        case 0:
-            algebraicSourcePosition = "a" + String(conversion!)
-        case 1:
-            algebraicSourcePosition = "b" + String(conversion!)
-        case 2:
-            algebraicSourcePosition = "c" + String(conversion!)
-        case 3:
-            algebraicSourcePosition = "d" + String(conversion!)
-        case 4:
-            algebraicSourcePosition = "e" + String(conversion!)
-        case 5:
-            algebraicSourcePosition = "f" + String(conversion!)
-        case 6:
-            algebraicSourcePosition = "g" + String(conversion!)
-        default:
-            algebraicSourcePosition = "h" + String(conversion!)
-        }
+        // set final source position to algebraic notation using ASCII table value
+        // 97 + 7 = 104 = h
+        // 97 + 6 = 103 = g
+        // .....
+        // 97 + 0 = 97  = a
+        algebraicSourcePosition = String(UnicodeScalar(UInt8(sourceIndex.col + 97)))
+        
+        // add appropriate notation to remove ambiguation due to like pieces on same col or row
+        if addToNotation != "" {
+        
+            if addToNotation.contains("R") && addToNotation.contains("C") {
+                thisPiece! += String(conversion!) + String(UnicodeScalar(UInt8(sourceIndex.col + 97)))
+            } else if addToNotation.contains("C") {
+                thisPiece! += String(conversion!)
+            } else if addToNotation.contains("R") {
+                thisPiece! += String(UnicodeScalar(UInt8(sourceIndex.col + 97)))
+            }
+        
+    }
 
         
         // convert destIndex.row to algebraic notation value
@@ -1162,25 +1209,12 @@ class ChessGame: NSObject {
             conversion = 8
         }
         
-        // set final destination position to algebraic notation
-        switch destIndex.col {
-        case 0:
-            algebraicDestPosition = "a" + String(conversion!)
-        case 1:
-            algebraicDestPosition = "b" + String(conversion!)
-        case 2:
-            algebraicDestPosition = "c" + String(conversion!)
-        case 3:
-            algebraicDestPosition = "d" + String(conversion!)
-        case 4:
-            algebraicDestPosition = "e" + String(conversion!)
-        case 5:
-            algebraicDestPosition = "f" + String(conversion!)
-        case 6:
-            algebraicDestPosition = "g" + String(conversion!)
-        default:
-            algebraicDestPosition = "h" + String(conversion!)
-        }
+        // set final dest position to algebraic notation using ASCII table value
+        // 97 + 7 = 104 = h
+        // 97 + 6 = 103 = g
+        // .....
+        // 97 + 0 = 97  = a
+        algebraicDestPosition = String(UnicodeScalar(UInt8(destIndex.col + 97))) + String(conversion!)
         
         // if capture was made by pawn alter the algebraicDestPosition string accordingly
         if captureMade && (chessPieceToMove is Pawn) {
