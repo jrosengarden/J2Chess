@@ -1136,6 +1136,12 @@ class ChessGame: NSObject {
                                         addToNotation += "C"
                                     }
                                 }
+                                // knight's require special handling
+                                if chessPieceIndex.row == sourceIndex.row {
+                                    addToNotation += "R"
+                                } else if chessPieceIndex.col == sourceIndex.col {
+                                    addToNotation += "C"
+                                }
                             }
                             
                             // undo move by putting back the attacking piece at the destination
