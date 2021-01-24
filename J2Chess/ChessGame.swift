@@ -1177,9 +1177,8 @@ class ChessGame: NSObject {
         
         // add appropriate notation to remove ambiguation due to like pieces on same col or row
         if addToNotation != "" {
-        
             if addToNotation.contains("R") && addToNotation.contains("C") {
-                thisPiece! += String(conversion!) + String(UnicodeScalar(UInt8(sourceIndex.col + 97)))
+                thisPiece! +=  String(UnicodeScalar(UInt8(sourceIndex.col + 97))) + String(conversion!)
             } else if addToNotation.contains("C") {
                 thisPiece! += String(conversion!)
             } else if addToNotation.contains("R") {
