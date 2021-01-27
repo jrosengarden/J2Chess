@@ -25,8 +25,6 @@ class ChessGame: NSObject {
     
     var checkMateCondition:Bool = false         // checkmate exists
     
-    // testing
-
     
     init(viewController: ViewController) {
         theChessBoard = ChessBoard.init(viewController: viewController)
