@@ -291,6 +291,8 @@ class ChessGame: NSObject {
                 
         if bestNetScore > limit {
             
+            theChessBoard.vc.AIFeedBack = "AI: Made best move"
+            theChessBoard.vc.AIFeedBack += "\n AI: Best Net Score: \(bestNetScore)"
             makeAIMoveAndUpdateNotation(chessPieceToMove: bestPiece, sourceIndex: bestSource, destIndex: bestDest, destOrigin: bestOrigin)
             
             print("AI: BEST NET SCORE: \(bestNetScore)")
