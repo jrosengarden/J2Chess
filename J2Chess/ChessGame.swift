@@ -24,6 +24,8 @@ class ChessGame: NSObject {
                                                 // with AI comments
     
     var checkMateCondition:Bool = false         // checkmate exists
+    
+    // testing
 
     
     init(viewController: ViewController) {
