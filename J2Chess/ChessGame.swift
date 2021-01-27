@@ -17,7 +17,7 @@ class ChessGame: NSObject {
     var moveCount:Int?                          // track move count for move display
     var firstHalfMove:String?                   // save current move until opponent moves
     var pieceToRemove:Piece?                    // global variable for piece (if any) at dest square
-    
+    var enPassantPawn:Piece?                    // global variable to track enPassant pawn removal
     var castleNotation:String = ""              // global variable to hold castling notation
     var gameMoves:[String] = []                 // global variable to retain all game moves
     var gameMoves2:[String] = []                // global variable to retain all game moves
@@ -619,6 +619,7 @@ class ChessGame: NSObject {
                         // dest.row is correct row so it's a legal en Passant move
                         // remove the attacked pawn and return true (legal move)
                         theChessBoard.remove(piece: attackPiece)
+                        enPassantPawn = attackPiece
                         return true
                     } else {
                         // incorrect row for en Passant move so it's an illegal move
@@ -1054,7 +1055,7 @@ class ChessGame: NSObject {
         
         var algebraicSourcePosition:String?         // std chess notation for source position
         var algebraicDestPosition:String?           // std chess notation for destination position
-        var conversion:Int?                         // conversion value (boardIndex to std chess)
+        var conversion:Character?                   // conversion value (boardIndex to std chess)
         var thisPiece:String?                       // std chess id of piece being moved
         var captureMade:Bool                        // true if capture being made false if not
         var moveText:String?                        // string containing std chess notation of
@@ -1062,9 +1063,12 @@ class ChessGame: NSObject {
         var moveText2:String?                       // save as above but with
                                                     // std chss notation & AI Feedback comments
         
+        let replacementText = "87654321"            // for conversion from board index to algebraic
+
+        
         // set capture string to "x" if the target square was not empty (Dummy)
         // note:  pieceToRemove is a global variable for this class (ChessGame.swift)
-        if pieceToRemove is Dummy {
+        if pieceToRemove is Dummy && enPassantPawn == nil {
             captureMade = false
         } else {
             captureMade = true
@@ -1146,24 +1150,8 @@ class ChessGame: NSObject {
         }
                
         // convert sourceIndex.row to algebraic notation value
-        switch sourceIndex.row {
-        case 7:
-            conversion = 1
-        case 6:
-            conversion = 2
-        case 5:
-            conversion = 3
-        case 4:
-            conversion = 4
-        case 3:
-            conversion = 5
-        case 2:
-            conversion = 6
-        case 1:
-            conversion = 7
-        default:
-            conversion = 8
-        }
+        let characterIndex1 = replacementText.index(replacementText.startIndex, offsetBy: sourceIndex.row)
+        conversion = replacementText[characterIndex1]
         
         // set final source position to algebraic notation using ASCII table value
         // 97 + 7 = 104 = h
@@ -1184,26 +1172,9 @@ class ChessGame: NSObject {
         
     }
 
-        
         // convert destIndex.row to algebraic notation value
-        switch destIndex.row {
-        case 7:
-            conversion = 1
-        case 6:
-            conversion = 2
-        case 5:
-            conversion = 3
-        case 4:
-            conversion = 4
-        case 3:
-            conversion = 5
-        case 2:
-            conversion = 6
-        case 1:
-            conversion = 7
-        default:
-            conversion = 8
-        }
+        let characterIndex2 = replacementText.index(replacementText.startIndex, offsetBy: destIndex.row)
+        conversion = replacementText[characterIndex2]
         
         // set final dest position to algebraic notation using ASCII table value
         // 97 + 7 = 104 = h
@@ -1253,6 +1224,10 @@ class ChessGame: NSObject {
             if checkMateCondition  {
                 moveText! = moveText!.replacingOccurrences(of: "+", with: "#")
             }
+            
+            if enPassantPawn != nil {
+                moveText! += "ep"
+            }
             // copy moveText to moveText2 and append AI feed back
             moveText2 = moveText! + "\n" + " " + theChessBoard.vc.AIFeedBack
             
@@ -1288,6 +1263,9 @@ class ChessGame: NSObject {
                     firstHalfMove! = firstHalfMove!.replacingOccurrences(of: "z", with: theChessBoard.vc.promotionType.prefix(1))
                 }
             }
+            if enPassantPawn != nil {
+                firstHalfMove! += "ep"
+            }
             while firstHalfMove!.count < 10 {
                 firstHalfMove! += " "
             }
@@ -1304,6 +1282,9 @@ class ChessGame: NSObject {
         }
         // reset pawn promotionType
         theChessBoard.vc.promotionType = ""
+        
+        // reset enPassantPawn
+        enPassantPawn = nil
         
         return !(isWhiteTurn) ? moveText! : ""
     }
